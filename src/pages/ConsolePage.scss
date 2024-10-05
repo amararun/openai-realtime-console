@@ -40,7 +40,8 @@
 
   .content-main {
     flex-grow: 1;
-    flex-shrink: 1 !important;
+    flex-shrink: 1;
+    min-height: 0; // This allows the content to shrink if needed
     margin: 0px 16px;
     display: flex;
     overflow: hidden;
@@ -281,6 +282,18 @@
         color: currentColor;
       }
     }
+  }
+
+  .content-footer {
+    flex-shrink: 0;
+    background-color: #f0f0f0;
+    padding: 15px 16px; // Increased padding for better spacing
+    text-align: center;
+    font-size: 20px; // Increased from 14px to 28px (doubled)
+    font-weight: bold;
+    color: #333;
+    border-top: 1px solid #ccc;
+    margin-top: auto; // This pushes the footer to the bottom
   }
 }
 

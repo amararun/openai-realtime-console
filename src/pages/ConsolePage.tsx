@@ -733,6 +733,9 @@ export function ConsolePage() {
           </div>
         </div>
       </div>
+      <footer className="content-footer">
+        <span>Amar Harolikar | Applied Gen AI for Data Science, Analytics and Business</span>
+      </footer>
     </div>
   );
 }
