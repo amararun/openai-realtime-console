@@ -385,18 +385,18 @@ export function ConsolePage() {
     client.addTool(
       {
         name: 'set_memory',
-        description: 'Saves important data about the user into memory.',
+        description: 'Add quick notes requested by the user',
         parameters: {
           type: 'object',
           properties: {
             key: {
               type: 'string',
               description:
-                'The key of the memory value. Always use lowercase and underscores, no other characters.',
+                'A short heading for the notes value. Always use uppercase  underscores, no other characters.',
             },
             value: {
               type: 'string',
-              description: 'Value can be anything represented as a string',
+              description: 'This is the note description that has been requested by the user to be saved. Maximum 30 words. Summarize as required. If no description is provided, then keep this empty',
             },
           },
           required: ['key', 'value'],
@@ -692,6 +692,16 @@ export function ConsolePage() {
           </div>
         </div>
         <div className="content-right">
+          <div className="content-block kv">
+            <div className="content-block-title">Quick Notes</div>
+            <div className="content-block-body content-kv">
+              {Object.entries(memoryKv).map(([key, value], index) => (
+                <div key={index}>
+                  <li>{`${key}: ${value}`}</li>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="content-block map">
             <div className="content-block-title">get_weather()</div>
             <div className="content-block-title bottom">
@@ -716,12 +726,6 @@ export function ConsolePage() {
                   location={coords.location}
                 />
               )}
-            </div>
-          </div>
-          <div className="content-block kv">
-            <div className="content-block-title">set_memory()</div>
-            <div className="content-block-body content-kv">
-              {JSON.stringify(memoryKv, null, 2)}
             </div>
           </div>
         </div>
