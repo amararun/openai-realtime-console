@@ -466,7 +466,7 @@ export function ConsolePage() {
       {
         name: 'tool_database_query',
         description:
-          'Execute an API call based on a user question if the question relates to data / database / aws / azure / customer profiling. The question is converted into a MySQL query and passed as a parameter. Another parameter is the cloud database provider, either Azure or AWS. See sample API endpoint URL call below.\n\nThe database server in both cases is MySQL, so ensure that queries are MySQL-compliant.\n\nIf the user refers to "schema" or "database", it refers to the following:\n- In Azure: schema_bankdat\n- In AWS: schema_defaults\n\nAll other schemas/databases on the MySQL server are system ones and not relevant.\n\nHere\'s an API endpoint example for reference. Use the correct values in the actual function:\n`https://azure-aws-mysql-dw.tigzig.com/sqlquery?sqlquery=SHOW%20TABLES%20FROM%20schema_defaults&cloud=aws`\n\nPlease allow up to 180 seconds for a query response, as the server can sometimes be slow.',
+          'Execute an API call based on a user question if the question relates to data / database / aws / azure / customer profiling. The question is converted into a MySQL query and passed as a parameter. Another parameter is the cloud database provider, either Azure or AWS.',
         parameters: {
           type: 'object',
           properties: {
@@ -486,23 +486,23 @@ export function ConsolePage() {
         const encodedSqlQuery = encodeURIComponent(sqlquery);
         const encodedCloudVar = encodeURIComponent(cloudVar);
         const url = `https://azure-aws-mysql-dw.tigzig.com/sqlquery/?sqlquery=${encodedSqlQuery}&cloud=${encodedCloudVar}`;
-    
-        const options = {
-          method: 'GET',
-          mode: 'no-cors' as RequestMode,
-          // Remove the Content-Type header
-        };
-    
+        
         try {
-          const response = await fetch(url, options);
-          
-          // Due to 'no-cors' mode, we can't access the response content directly
-          // We'll return a success message and suggest checking the server logs
-          if (response.type === 'opaque') {
-            return 'Query sent successfully. Please check server logs for the result.';
-          } else {
-            throw new Error('Unexpected response type');
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'text/plain',
+              // Add any other headers your API might require
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
+
+          const result = await response.text();
+          console.log('API Response:', result); // Log the response for debugging
+          return result;
         } catch (error) {
           console.error('Error in tool_database_query:', error);
           return `An error occurred while querying the database: ${error instanceof Error ? error.message : 'Unknown error'}`;
