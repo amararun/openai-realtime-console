@@ -238,12 +238,17 @@ export function ConsolePage() {
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
     const wavStreamPlayer = wavStreamPlayerRef.current;
-    const trackSampleOffset = await wavStreamPlayer.interrupt();
-    if (trackSampleOffset?.trackId) {
-      const { trackId, offset } = trackSampleOffset;
-      await client.cancelResponse(trackId, offset);
+    
+    if (client.isConnected()) {
+      const trackSampleOffset = await wavStreamPlayer.interrupt();
+      if (trackSampleOffset?.trackId) {
+        const { trackId, offset } = trackSampleOffset;
+        await client.cancelResponse(trackId, offset);
+      }
+      await wavRecorder.record((data) => client.appendInputAudio(data.mono));
+    } else {
+      console.warn('Client is not connected. Unable to start recording.');
     }
-    await wavRecorder.record((data) => client.appendInputAudio(data.mono));
   };
 
   /**
@@ -253,8 +258,13 @@ export function ConsolePage() {
     setIsRecording(false);
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
+    
     await wavRecorder.pause();
-    client.createResponse();
+    if (client.isConnected()) {
+      client.createResponse();
+    } else {
+      console.warn('Client is not connected. Unable to create response.');
+    }
   };
 
   /**
@@ -483,26 +493,27 @@ export function ConsolePage() {
         },
       },
       async ({ sqlquery, cloudVar }: { [key: string]: any }) => {
+        // Properly encode the query parameters
         const encodedSqlQuery = encodeURIComponent(sqlquery);
         const encodedCloudVar = encodeURIComponent(cloudVar);
-        const url = `https://azure-aws-mysql-dw.tigzig.com/sqlquery/?sqlquery=${encodedSqlQuery}&cloud=${encodedCloudVar}`;
-        
-        try {
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Accept': 'text/plain',
-              // Add any other headers your API might require
-            },
-          });
 
+        const url = `https://azure-aws-mysql-flowise.onrender.com/sqlquery/?sqlquery=${encodedSqlQuery}&cloud=${encodedCloudVar}`;
+
+        const options = {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+
+        try {
+          const response = await fetch(url, options);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-
-          const result = await response.text();
-          console.log('API Response:', result); // Log the response for debugging
-          return result;
+          const text = await response.text();
+          console.log('API Response:', text); // Log the response for debugging
+          return text;
         } catch (error) {
           console.error('Error in tool_database_query:', error);
           return `An error occurred while querying the database: ${error instanceof Error ? error.message : 'Unknown error'}`;
@@ -524,7 +535,10 @@ export function ConsolePage() {
         }
       });
     });
-    client.on('error', (event: any) => console.error(event));
+    client.on('error', (event: any) => {
+      console.error('RealtimeClient error:', event);
+      setIsConnected(false);
+    });
     client.on('conversation.interrupted', async () => {
       const trackSampleOffset = await wavStreamPlayer.interrupt();
       if (trackSampleOffset?.trackId) {
@@ -583,6 +597,9 @@ export function ConsolePage() {
             label="Show Events"
             onClick={() => setShowEventsPopup(true)}
           />
+          <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+            {isConnected ? 'Connected' : 'Disconnected'}
+          </div>
         </div>
       </div>
       <div className="content-main">
