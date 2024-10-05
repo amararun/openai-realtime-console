@@ -2,7 +2,7 @@
   font-family: 'Roboto Mono', monospace;
   font-weight: 400;
   font-style: normal;
-  font-size: 12px;
+  font-size: 12px; // Reverted back to original size
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -26,9 +26,14 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      img {
-        width: 24px;
-        height: 24px;
+      img.fxis-logo {
+        width: auto;
+        height: 48px; // Increased logo size
+        margin-right: 16px;
+      }
+      span {
+        font-size: 24px; // Increased font size for the header text
+        font-weight: bold; // Optional: makes the text bold
       }
     }
   }

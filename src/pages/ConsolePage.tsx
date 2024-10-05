@@ -511,7 +511,7 @@ export function ConsolePage() {
       <div className="content-top">
         <div className="content-title">
           <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-          <span>realtime console</span>
+          <span>Realtime Analytics Assistant</span>
         </div>
         <div className="content-api-key">
           {!LOCAL_RELAY_SERVER_URL && (
