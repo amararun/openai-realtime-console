@@ -27,6 +27,9 @@ import { Map } from '../components/Map';
 import './ConsolePage.scss';
 import { isJsxOpeningLikeElement } from 'typescript';
 
+// Remove this line
+// import fxisLogo from '../FXISLOGO.png';
+
 /**
  * Type for result from get_weather() function call
  */
@@ -507,7 +510,7 @@ export function ConsolePage() {
     <div data-component="ConsolePage">
       <div className="content-top">
         <div className="content-title">
-          <img src="/openai-logomark.svg" />
+          <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
           <span>realtime console</span>
         </div>
         <div className="content-api-key">

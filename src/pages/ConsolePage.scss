@@ -278,3 +278,32 @@
     }
   }
 }
+
+.fxis-logo {
+  width: auto;
+  height: 3em; // This will make the logo 3 times larger than the text
+  margin-right: 10px; // Add some space between the logo and the text
+}
+
+.content-title {
+  display: flex;
+  align-items: center; // This will vertically center the logo with the text
+}
+
+// Add this new block at the end of the file
+.content-top {
+  .content-title {
+    img.fxis-logo {
+      width: auto !important;
+      height: 72px !important; // Significantly increased size
+      margin-right: 16px !important;
+    }
+  }
+}
+
+// Add this at the very end of the file
+[data-component='ConsolePage'] .content-top .content-title img.fxis-logo {
+  width: auto !important;
+  height: 72px !important;
+  margin-right: 16px !important;
+}
