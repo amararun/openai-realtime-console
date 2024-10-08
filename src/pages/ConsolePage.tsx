@@ -914,6 +914,52 @@ export function ConsolePage() {
           </div>
         </div>
         <div className="content-right">
+          <div className="content-top-row">
+            <div className="content-block chart-display">
+              <div className="content-block-title">
+                CHART DISPLAY
+                <div className="chart-navigation">
+                  <button onClick={showPreviousChart} disabled={currentChartIndex === 0}>
+                    <ChevronUp size={16} />
+                  </button>
+                  <button onClick={showNextChart} disabled={currentChartIndex === charts.length - 1}>
+                    <ChevronDown size={16} />
+                  </button>
+                </div>
+              </div>
+              <div className="content-block-body">
+                {charts.length > 0 ? (
+                  <div className="chart-scroll-container">
+                    {charts.map((chart, index) => (
+                      <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`}>
+                        <img 
+                          src={chart.url} 
+                          alt={`Generated Chart ${index + 1}`} 
+                          style={{ maxWidth: '100%', height: 'auto' }}
+                          onError={(e) => console.error('Image load error:', e)}
+                        />
+                        <div className="chart-timestamp">
+                          {new Date(chart.timestamp).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="chart-placeholder">No charts generated yet</div>
+                )}
+              </div>
+            </div>
+            <div className="content-block kv">
+              <div className="content-block-title">QUICK NOTES</div>
+              <div className="content-block-body content-kv">
+                {Object.entries(memoryKv).map(([key, value], index) => (
+                  <div key={index}>
+                    <li>{`${key}: ${value}`}</li>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
           <div className="content-block google-sheets">
             <div className="content-block-title">
               GOOGLE SHEETS
@@ -929,50 +975,6 @@ export function ConsolePage() {
                 height="420"
                 frameBorder="0"
               ></iframe>
-            </div>
-          </div>
-          <div className="content-block kv">
-            <div className="content-block-title">QUICK NOTES</div>
-            <div className="content-block-body content-kv">
-              {Object.entries(memoryKv).map(([key, value], index) => (
-                <div key={index}>
-                  <li>{`${key}: ${value}`}</li>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="content-block chart-display">
-            <div className="content-block-title">
-              CHART DISPLAY
-              <div className="chart-navigation">
-                <button onClick={showPreviousChart} disabled={currentChartIndex === 0}>
-                  <ChevronUp size={16} />
-                </button>
-                <button onClick={showNextChart} disabled={currentChartIndex === charts.length - 1}>
-                  <ChevronDown size={16} />
-                </button>
-              </div>
-            </div>
-            <div className="content-block-body">
-              {charts.length > 0 ? (
-                <div className="chart-scroll-container">
-                  {charts.map((chart, index) => (
-                    <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`}>
-                      <img 
-                        src={chart.url} 
-                        alt={`Generated Chart ${index + 1}`} 
-                        style={{ width: '20%', height: 'auto' }} // Reduced size to 20%
-                        onError={(e) => console.error('Image load error:', e)}
-                      />
-                      <div className="chart-timestamp">
-                        {new Date(chart.timestamp).toLocaleTimeString()}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="chart-placeholder">No charts generated yet</div>
-              )}
             </div>
           </div>
         </div>

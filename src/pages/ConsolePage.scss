@@ -311,173 +311,39 @@ $header-text-color: #1a237e; // Dark navy blue
       flex-direction: column;
       gap: 12px;
 
-      .google-sheets {
-        flex: 0 0 auto;
-        height: calc(40% - 8px); // Reduced height to accommodate the chart display
+      .content-top-row {
         display: flex;
-        flex-direction: column;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+        gap: 12px;
+        height: 300px; // Adjust this value to change the height of the top row
 
-        .content-block-title {
-          padding: 0 12px; // Remove vertical padding
-          font-size: 14px;
-          font-weight: 500;
-          color: white;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          background-image: linear-gradient(to right, $primary-color, lighten($primary-color, 15%));
-          border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          height: 36px; // Fixed height
+        .chart-display,
+        .kv {
+          flex: 1;
+          height: 100%;
           display: flex;
-          align-items: center; // Vertically center the text
-          margin: 0;
-          line-height: 36px; // Match the height for perfect centering
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-
-          .refresh-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: transform 0.2s ease-in-out;
-
-            &:hover {
-              transform: rotate(180deg);
-            }
-
-            svg {
-              width: 16px;
-              height: 16px;
-            }
-          }
-        }
-
-        .content-block-body {
-          flex-grow: 1;
-          padding: 8px;
-          overflow: hidden;
-
-          iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-          }
-        }
-      }
-
-      .kv {
-        flex: 0 0 auto;
-        height: calc(20% - 8px); // Reduced height to accommodate the chart display
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-
-        .content-block-title {
-          padding: 0 12px; // Remove vertical padding
-          font-size: 14px;
-          font-weight: 500;
-          color: white;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          background-image: linear-gradient(to right, $secondary-color, lighten($secondary-color, 15%));
-          border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          height: 36px; // Fixed height
-          display: flex;
-          align-items: center; // Vertically center the text
-          margin: 0;
-          line-height: 36px; // Match the height for perfect centering
-        }
-
-        .content-block-body {
-          flex-grow: 1;
-          padding: 16px;
-          overflow-y: auto;
+          flex-direction: column;
         }
       }
 
       .chart-display {
-        flex: 0 0 auto;
-        height: calc(40% - 8px); // New chart display area
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-
-        .content-block-title {
-          padding: 0 12px;
-          font-size: 14px;
-          font-weight: 500;
-          color: white;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          background-image: linear-gradient(to right, $accent-color, lighten($accent-color, 15%));
-          border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          height: 36px;
-          display: flex;
-          align-items: center;
-          margin: 0;
-          line-height: 36px;
-        }
-
         .content-block-body {
-          flex-grow: 1;
-          padding: 16px;
-          overflow-y: auto;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-          }
-
-          .chart-placeholder {
-            color: $light-text-color;
-            font-style: italic;
-          }
-
           .chart-scroll-container {
-            max-height: 100%;
+            height: 100%;
             overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
 
             .chart-item {
               display: flex;
               flex-direction: column;
               align-items: center;
-              // Remove opacity and transition
-              position: relative; // Changed from absolute to relative
-              width: 100%;
-              // Remove height: 100%
+              margin-bottom: 16px;
 
-              &.active {
-                // Remove opacity: 1
+              &:last-child {
+                margin-bottom: 0;
               }
 
               img {
-                width: 20%; // Set width to 20%
-                height: auto;
+                max-width: 100%;
+                max-height: 200px; // Adjust this value to change the maximum height of the chart
                 object-fit: contain;
               }
 
@@ -487,6 +353,29 @@ $header-text-color: #1a237e; // Dark navy blue
                 color: $light-text-color;
               }
             }
+          }
+        }
+      }
+
+      .kv {
+        .content-block-body {
+          overflow-y: auto;
+        }
+      }
+
+      .google-sheets {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .content-block-body {
+          flex: 1;
+          overflow: hidden;
+
+          iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
           }
         }
       }
