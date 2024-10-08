@@ -128,6 +128,64 @@
         flex-grow: 1;
         overflow: auto;
         border-top: none;
+        min-height: 60vh; // Ensure conversation takes at least 60% of the viewport height
+      }
+      .content-bottom {
+        display: flex;
+        height: 25vh; // Set the height to 25% of the viewport height
+        max-height: 200px; // Set a maximum height
+        border-top: 1px solid #e7e7e7;
+
+        .events {
+          flex: 2; // Give more space to events
+          overflow: auto;
+          border-right: 1px solid #e7e7e7;
+        }
+
+        .visualization {
+          flex: 1; // Give less space to visualization
+          display: flex;
+          flex-direction: column;
+
+          .content-block-title {
+            padding: 4px;
+            text-align: center;
+          }
+
+          .visualization-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row; // Change to row to place boxes side by side
+            justify-content: space-around;
+            padding: 4px;
+
+            .visualization-entry {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              width: 45%; // Adjust width to fit side by side
+
+              span {
+                margin-bottom: 2px;
+                font-weight: bold;
+                font-size: 10px; // Reduce font size
+              }
+
+              canvas {
+                width: 100%;
+                height: 40px; // Reduce height
+              }
+
+              &.client {
+                color: #0099ff;
+              }
+
+              &.server {
+                color: #009900;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -376,64 +434,4 @@
   color: #666;
 }
 
-.content-main {
-  .content-logs {
-    .conversation {
-      flex-grow: 2; // Give more space to the conversation
-      overflow: auto;
-      border-bottom: 1px solid #e7e7e7;
-    }
-
-    .events {
-      flex-grow: 1; // Give less space to the events
-      overflow: auto;
-      max-height: 30vh; // Limit the height of the events section
-      border-top: 1px solid #e7e7e7;
-    }
-  }
-}
-
-// Add these new styles for the events section
-.events {
-  .content-block-body {
-    padding: 8px;
-    font-size: 10px; // Smaller font size for events
-  }
-
-  .event {
-    display: flex;
-    margin-bottom: 4px;
-  }
-
-  .event-timestamp {
-    width: 60px;
-    flex-shrink: 0;
-  }
-
-  .event-details {
-    flex-grow: 1;
-  }
-
-  .event-summary {
-    display: flex;
-    align-items: center;
-  }
-
-  .event-source {
-    display: flex;
-    align-items: center;
-    margin-right: 8px;
-
-    svg {
-      width: 12px;
-      height: 12px;
-      margin-right: 4px;
-    }
-  }
-}
-
-// Adjust the visualization styles
-.visualization {
-  position: static;
-  margin-bottom: 8px;
-}
+// Remove any conflicting or redundant visualization styles

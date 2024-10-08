@@ -722,37 +722,44 @@ export function ConsolePage() {
               )}
             </div>
           </div>
-          <div className="content-block events">
-            <div className="content-block-title">EVENTS</div>
-            <div className="content-block-body" ref={eventsScrollRef}>
-              <div className="visualization">
-                <div className="visualization-entry client">
-                  <canvas ref={clientCanvasRef} />
-                </div>
-                <div className="visualization-entry server">
-                  <canvas ref={serverCanvasRef} />
-                </div>
-              </div>
-              {!realtimeEvents.length && `awaiting connection...`}
-              {realtimeEvents.map((realtimeEvent, i) => (
-                <div className="event" key={realtimeEvent.event.event_id}>
-                  <div className="event-timestamp">
-                    {formatTime(realtimeEvent.time)}
-                  </div>
-                  <div className="event-details">
-                    <div className="event-summary">
-                      <div className={`event-source ${realtimeEvent.source}`}>
-                        {realtimeEvent.source === 'client' ? <ArrowUp /> : <ArrowDown />}
-                        <span>{realtimeEvent.source}</span>
-                      </div>
-                      <div className="event-type">
-                        {realtimeEvent.event.type}
-                        {realtimeEvent.count && ` (${realtimeEvent.count})`}
+          <div className="content-bottom">
+            <div className="content-block events">
+              <div className="content-block-title">EVENTS</div>
+              <div className="content-block-body" ref={eventsScrollRef}>
+                {!realtimeEvents.length && `awaiting connection...`}
+                {realtimeEvents.map((realtimeEvent, i) => (
+                  <div className="event" key={realtimeEvent.event.event_id}>
+                    <div className="event-timestamp">
+                      {formatTime(realtimeEvent.time)}
+                    </div>
+                    <div className="event-details">
+                      <div className="event-summary">
+                        <div className={`event-source ${realtimeEvent.source}`}>
+                          {realtimeEvent.source === 'client' ? <ArrowUp /> : <ArrowDown />}
+                          <span>{realtimeEvent.source}</span>
+                        </div>
+                        <div className="event-type">
+                          {realtimeEvent.event.type}
+                          {realtimeEvent.count && ` (${realtimeEvent.count})`}
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
+            <div className="content-block visualization">
+              <div className="content-block-title">VOICE ACTIVITY</div>
+              <div className="visualization-content">
+                <div className="visualization-entry client">
+                  <span>User</span>
+                  <canvas ref={clientCanvasRef} />
                 </div>
-              ))}
+                <div className="visualization-entry server">
+                  <span>Assistant</span>
+                  <canvas ref={serverCanvasRef} />
+                </div>
+              </div>
             </div>
           </div>
           <div className="content-actions">
