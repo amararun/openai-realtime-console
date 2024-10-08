@@ -139,7 +139,7 @@ export function ConsolePage() {
   const [marker, setMarker] = useState<Coordinates | null>(null);
 
   const [showEvents, setShowEvents] = useState(false);
-  const [showEventsPopup, setShowEventsPopup] = useState(false);
+  // const [showEventsPopup, setShowEventsPopup] = useState(false);
 
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
 
@@ -634,13 +634,6 @@ export function ConsolePage() {
             buttonStyle={isConnected ? 'regular' : 'action'}
             onClick={isConnected ? disconnectConversation : connectConversation}
           />
-          <Button
-            icon={AlertCircle}
-            iconPosition="start"
-            buttonStyle="regular"
-            label="SHOW EVENTS"
-            onClick={() => setShowEventsPopup(true)}
-          />
           <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
             {isConnected ? 'Connected' : 'Disconnected'}
           </div>
@@ -729,6 +722,39 @@ export function ConsolePage() {
               )}
             </div>
           </div>
+          <div className="content-block events">
+            <div className="content-block-title">EVENTS</div>
+            <div className="content-block-body" ref={eventsScrollRef}>
+              <div className="visualization">
+                <div className="visualization-entry client">
+                  <canvas ref={clientCanvasRef} />
+                </div>
+                <div className="visualization-entry server">
+                  <canvas ref={serverCanvasRef} />
+                </div>
+              </div>
+              {!realtimeEvents.length && `awaiting connection...`}
+              {realtimeEvents.map((realtimeEvent, i) => (
+                <div className="event" key={realtimeEvent.event.event_id}>
+                  <div className="event-timestamp">
+                    {formatTime(realtimeEvent.time)}
+                  </div>
+                  <div className="event-details">
+                    <div className="event-summary">
+                      <div className={`event-source ${realtimeEvent.source}`}>
+                        {realtimeEvent.source === 'client' ? <ArrowUp /> : <ArrowDown />}
+                        <span>{realtimeEvent.source}</span>
+                      </div>
+                      <div className="event-type">
+                        {realtimeEvent.event.type}
+                        {realtimeEvent.count && ` (${realtimeEvent.count})`}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="content-actions">
             <div className="spacer" />
             {isConnected && canPushToTalk && (
@@ -756,89 +782,6 @@ export function ConsolePage() {
           </div>
         </div>
       </div>
-      {showEventsPopup && (
-        <div className="events-popup">
-          <div className="events-popup-content">
-            <div className="events-popup-header">
-              <h2>Events</h2>
-              <button onClick={() => setShowEventsPopup(false)}><X /></button>
-            </div>
-            <div className="events-popup-body">
-              <div className="visualization">
-                <div className="visualization-entry client">
-                  <canvas ref={clientCanvasRef} />
-                </div>
-                <div className="visualization-entry server">
-                  <canvas ref={serverCanvasRef} />
-                </div>
-              </div>
-              <div className="content-block-body" ref={eventsScrollRef}>
-                {!realtimeEvents.length && `awaiting connection...`}
-                {realtimeEvents.map((realtimeEvent, i) => {
-                  const count = realtimeEvent.count;
-                  const event = { ...realtimeEvent.event };
-                  if (event.type === 'input_audio_buffer.append') {
-                    event.audio = `[trimmed: ${event.audio.length} bytes]`;
-                  } else if (event.type === 'response.audio.delta') {
-                    event.delta = `[trimmed: ${event.delta.length} bytes]`;
-                  }
-                  return (
-                    <div className="event" key={event.event_id}>
-                      <div className="event-timestamp">
-                        {formatTime(realtimeEvent.time)}
-                      </div>
-                      <div className="event-details">
-                        <div
-                          className="event-summary"
-                          onClick={() => {
-                            // toggle event details
-                            const id = event.event_id;
-                            const expanded = { ...expandedEvents };
-                            if (expanded[id]) {
-                              delete expanded[id];
-                            } else {
-                              expanded[id] = true;
-                            }
-                            setExpandedEvents(expanded);
-                          }}
-                        >
-                          <div
-                            className={`event-source ${
-                              event.type === 'error'
-                                ? 'error'
-                                : realtimeEvent.source
-                            }`}
-                          >
-                            {realtimeEvent.source === 'client' ? (
-                              <ArrowUp />
-                            ) : (
-                              <ArrowDown />
-                            )}
-                            <span>
-                              {event.type === 'error'
-                                ? 'error!'
-                                : realtimeEvent.source}
-                            </span>
-                          </div>
-                          <div className="event-type">
-                            {event.type}
-                            {count && ` (${count})`}
-                          </div>
-                        </div>
-                        {!!expandedEvents[event.event_id] && (
-                          <div className="event-payload">
-                            {JSON.stringify(event, null, 2)}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       <footer className="content-footer">
         <span>Amar Harolikar | Applied Gen AI for Data Science, Analytics and Business</span>
       </footer>
