@@ -313,7 +313,7 @@ $header-text-color: #1a237e; // Dark navy blue
 
       .google-sheets {
         flex: 0 0 auto;
-        height: calc(70% - 6px); // 70% of the space minus half the gap
+        height: calc(40% - 8px); // Reduced height to accommodate the chart display
         display: flex;
         flex-direction: column;
         background-color: white;
@@ -377,7 +377,7 @@ $header-text-color: #1a237e; // Dark navy blue
 
       .kv {
         flex: 0 0 auto;
-        height: calc(30% - 6px); // 30% of the space minus half the gap
+        height: calc(20% - 8px); // Reduced height to accommodate the chart display
         background-color: white;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -406,6 +406,54 @@ $header-text-color: #1a237e; // Dark navy blue
           flex-grow: 1;
           padding: 16px;
           overflow-y: auto;
+        }
+      }
+
+      .chart-display {
+        flex: 0 0 auto;
+        height: calc(40% - 8px); // New chart display area
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .content-block-title {
+          padding: 0 12px;
+          font-size: 14px;
+          font-weight: 500;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $accent-color, lighten($accent-color, 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px;
+          display: flex;
+          align-items: center;
+          margin: 0;
+          line-height: 36px;
+        }
+
+        .content-block-body {
+          flex-grow: 1;
+          padding: 16px;
+          overflow-y: auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+
+          .chart-placeholder {
+            color: $light-text-color;
+            font-style: italic;
+          }
         }
       }
     }

@@ -151,6 +151,8 @@ export function ConsolePage() {
 
   const [iframeKey, setIframeKey] = useState(0);
 
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   // Add this function to handle manual refresh
   const handleRefresh = () => {
     setIframeKey(prevKey => prevKey + 1);
@@ -518,7 +520,8 @@ export function ConsolePage() {
       }
     );
 
-    // Add the corrected tool_database_query
+    // Comment out the tool_database_query
+    /*
     client.addTool(
       {
         name: 'tool_database_query',
@@ -567,7 +570,67 @@ export function ConsolePage() {
         }
       }
     );
+    */
     
+
+    client.addTool(
+      {
+        name: 'tool_multitask_api',
+        description:
+          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+        parameters: {
+          type: 'object',
+          properties: {
+            question: {
+              type: 'string',
+              description: 'The user input or question to send to the API',
+            },
+          },
+          required: ['question'],
+        },
+      },
+      async ({ question }: { [key: string]: any }) => {
+        const url = "https://flowise2-4vzn.onrender.com/api/v1/prediction/1bca2aa1-cadf-4916-9ab4-d4d92d2590bc";
+
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ question })
+        };
+
+        try {
+          const response = await fetch(url, options);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const contentType = response.headers.get("Content-Type");
+
+          if (contentType && contentType.includes("application/json")) {
+            const jsonResponse = await response.json();
+            console.log('JSON Response:', jsonResponse);
+            return jsonResponse;
+          } else if (contentType && (contentType.includes("text/plain") || contentType.includes("application/octet-stream"))) {
+            const textResponse = await response.text();
+            console.log('Text Response:', textResponse);
+            return textResponse;
+          } else if (contentType && contentType.includes("image/")) {
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            setImageUrl(imageUrl);
+            return "Image generated successfully. It will be displayed in the chart area.";
+          } else {
+            return 'Unknown response type';
+          }
+        } catch (error) {
+          console.error('Error in tool_multitask_api:', error);
+          return `An error occurred: ${error instanceof Error ? error.message : 'Unknown error'}`;
+        }
+      }
+    );
 
     // handle realtime events from client + server for event logging
     client.on('realtime.event', (realtimeEvent: RealtimeEvent) => {
@@ -626,6 +689,15 @@ export function ConsolePage() {
   useEffect(() => {
     changeTurnEndType('server_vad');
   }, []);
+
+  // Add this useEffect for cleanup
+  useEffect(() => {
+    return () => {
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
+      }
+    };
+  }, [imageUrl]);
 
   // Add this useRef for the conversation container
   const conversationRef = useRef<HTMLDivElement>(null);
@@ -810,6 +882,16 @@ export function ConsolePage() {
                   <li>{`${key}: ${value}`}</li>
                 </div>
               ))}
+            </div>
+          </div>
+          <div className="content-block chart-display">
+            <div className="content-block-title">CHART DISPLAY</div>
+            <div className="content-block-body">
+              {imageUrl ? (
+                <img src={imageUrl} alt="Generated Chart" style={{ maxWidth: '100%', height: 'auto' }} />
+              ) : (
+                <div className="chart-placeholder">No chart generated yet</div>
+              )}
             </div>
           </div>
         </div>
