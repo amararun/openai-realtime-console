@@ -170,12 +170,12 @@ $header-text-color: #1a237e; // Dark navy blue
   .content-main {
     flex-grow: 1;
     display: flex;
-    padding: 0 12px 12px; // Removed top padding
+    padding: 0 12px 12px;
     gap: 12px;
     overflow: hidden;
 
     .content-logs {
-      flex-grow: 1;
+      flex: 0 0 50%; // Change this to take up 50% of the width
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -306,13 +306,84 @@ $header-text-color: #1a237e; // Dark navy blue
     }
 
     .content-right {
-      width: 250px;
+      flex: 0 0 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
 
-      .kv {
+      .google-sheets {
+        flex: 0 0 auto;
+        height: calc(70% - 6px); // 70% of the space minus half the gap
+        display: flex;
+        flex-direction: column;
         background-color: white;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         overflow: hidden;
+
+        .content-block-title {
+          padding: 0 12px; // Remove vertical padding
+          font-size: 14px;
+          font-weight: 500;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $primary-color, lighten($primary-color, 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px; // Fixed height
+          display: flex;
+          align-items: center; // Vertically center the text
+          margin: 0;
+          line-height: 36px; // Match the height for perfect centering
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .refresh-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.2s ease-in-out;
+
+            &:hover {
+              transform: rotate(180deg);
+            }
+
+            svg {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+
+        .content-block-body {
+          flex-grow: 1;
+          padding: 8px;
+          overflow: hidden;
+
+          iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+        }
+      }
+
+      .kv {
+        flex: 0 0 auto;
+        height: calc(30% - 6px); // 30% of the space minus half the gap
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
 
         .content-block-title {
           padding: 0 12px; // Remove vertical padding
@@ -332,7 +403,9 @@ $header-text-color: #1a237e; // Dark navy blue
         }
 
         .content-block-body {
+          flex-grow: 1;
           padding: 16px;
+          overflow-y: auto;
         }
       }
     }

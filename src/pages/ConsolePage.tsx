@@ -19,7 +19,7 @@ import { WavRecorder, WavStreamPlayer } from '../lib/wavtools/index.js';
 import { instructions } from '../utils/conversation_config.js';
 import { WavRenderer } from '../utils/wav_renderer';
 
-import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle, Loader } from 'react-feather';
+import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle, Loader, RefreshCw } from 'react-feather';
 import { Button } from '../components/button/Button';
 import { Toggle } from '../components/toggle/Toggle';
 import { Map } from '../components/Map';
@@ -148,6 +148,13 @@ export function ConsolePage() {
 
   // Add this new state
   const [isActive, setIsActive] = useState(false);
+
+  const [iframeKey, setIframeKey] = useState(0);
+
+  // Add this function to handle manual refresh
+  const handleRefresh = () => {
+    setIframeKey(prevKey => prevKey + 1);
+  };
 
   /**
    * Utility for formatting the timing of logs
@@ -778,6 +785,23 @@ export function ConsolePage() {
           </div>
         </div>
         <div className="content-right">
+          <div className="content-block google-sheets">
+            <div className="content-block-title">
+              GOOGLE SHEETS
+              <button className="refresh-button" onClick={handleRefresh}>
+                <RefreshCw size={16} />
+              </button>
+            </div>
+            <div className="content-block-body">
+              <iframe
+                key={iframeKey}
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQktRJ81_MoWeeiemwz724h6Zo8p8Lgx3rrBgAQUFf1m9FHaFLEtZVQR1Nth9TjoIKmVO5lVfwM1ma2/pubhtml?widget=true&rm=minimal"
+                width="100%"
+                height="420"
+                frameBorder="0"
+              ></iframe>
+            </div>
+          </div>
           <div className="content-block kv">
             <div className="content-block-title">QUICK NOTES</div>
             <div className="content-block-body content-kv">
