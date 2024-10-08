@@ -30,6 +30,9 @@ import { isJsxOpeningLikeElement } from 'typescript';
 // Remove this line
 // import fxisLogo from '../FXISLOGO.png';
 
+// Add this import at the top of the file
+import { RingLoader } from 'react-spinners';
+
 /**
  * Type for result from get_weather() function call
  */
@@ -640,7 +643,8 @@ export function ConsolePage() {
         </div>
         {isConnected && (
           <div className="voice-activity-indicator">
-            <div className="spinner-bar"></div>
+            <RingLoader color="#ffffff" size={40} />
+            <span className="activity-text">Listening</span>
           </div>
         )}
         <div className="content-controls">

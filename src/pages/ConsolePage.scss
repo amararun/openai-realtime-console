@@ -47,28 +47,25 @@ $header-text-color: #1a237e; // Dark navy blue
 
     .voice-activity-indicator {
       flex: 0 0 auto;
-      width: 120px;
-      height: 30px;
-      margin: 0 16px;
+      width: 70px;
+      height: 70px;
+      margin: 0 12px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      border-radius: 15px;
-      background-color: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background-color: #1a237e;
       overflow: hidden;
+      padding: 4px;
 
-      .spinner-bar {
-        width: 100%;
-        height: 100%;
-        background: repeating-linear-gradient(
-          45deg,
-          $primary-color,
-          $primary-color 10px,
-          lighten($primary-color, 10%) 10px,
-          lighten($primary-color, 10%) 20px
-        );
-        animation: move-stripes 1s linear infinite;
+      // Remove the previous .spinner styles
+
+      .activity-text {
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
       }
     }
 
@@ -452,6 +449,16 @@ $header-text-color: #1a237e; // Dark navy blue
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes waveform {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+}
+
+@keyframes pulse {
+  0%, 100% { background-color: rgba(0, 0, 0, 0.1); }
+  50% { background-color: rgba(0, 0, 0, 0.2); }
 }
 
 @keyframes move-stripes {
