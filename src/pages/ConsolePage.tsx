@@ -636,18 +636,20 @@ export function ConsolePage() {
               const imageArtifact = jsonResponse.artifacts.find((artifact: any) => artifact.type === 'png' || artifact.type === 'gif');
               if (imageArtifact) {
                 console.log('Image artifact found:', imageArtifact);
+                let imageUrl: string;
                 if (imageArtifact.data.startsWith('FILE-STORAGE::')) {
                   const fileName = imageArtifact.data.replace('FILE-STORAGE::', '');
-                  const imageUrl = `https://flowise2-4vzn.onrender.com/api/v1/get-upload-file?chatflowId=1bca2aa1-cadf-4916-9ab4-d4d92d2590bc&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
-                  console.log('Setting image URL:', imageUrl);
-                  setImageUrl(imageUrl);
-                  return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
+                  imageUrl = `https://flowise2-4vzn.onrender.com/api/v1/get-upload-file?chatflowId=1bca2aa1-cadf-4916-9ab4-d4d92d2590bc&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
                 } else {
-                  const imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
-                  console.log('Setting image URL from artifact');
-                  setImageUrl(imageUrl);
-                  return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
+                  imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
                 }
+                console.log('Setting image URL:', imageUrl);
+                setCharts(prevCharts => {
+                  const newCharts = [...prevCharts, { url: imageUrl, timestamp: Date.now() }];
+                  setCurrentChartIndex(newCharts.length - 1);
+                  return newCharts;
+                });
+                return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
               }
             }
             
@@ -750,6 +752,20 @@ export function ConsolePage() {
       scrollElement.scrollTop = scrollElement.scrollHeight;
     }
   }, [items]);
+
+  // Add this to your state declarations
+  const [charts, setCharts] = useState<{ url: string; timestamp: number }[]>([]);
+
+  // Add these functions for chart navigation
+  const [currentChartIndex, setCurrentChartIndex] = useState(0);
+
+  const showPreviousChart = () => {
+    setCurrentChartIndex(prevIndex => Math.max(0, prevIndex - 1));
+  };
+
+  const showNextChart = () => {
+    setCurrentChartIndex(prevIndex => Math.min(charts.length - 1, prevIndex + 1));
+  };
 
   /**
    * Render the application
@@ -926,17 +942,36 @@ export function ConsolePage() {
             </div>
           </div>
           <div className="content-block chart-display">
-            <div className="content-block-title">CHART DISPLAY</div>
+            <div className="content-block-title">
+              CHART DISPLAY
+              <div className="chart-navigation">
+                <button onClick={showPreviousChart} disabled={currentChartIndex === 0}>
+                  <ChevronUp size={16} />
+                </button>
+                <button onClick={showNextChart} disabled={currentChartIndex === charts.length - 1}>
+                  <ChevronDown size={16} />
+                </button>
+              </div>
+            </div>
             <div className="content-block-body">
-              {imageUrl ? (
-                <img 
-                  src={imageUrl} 
-                  alt="Generated Chart" 
-                  style={{ maxWidth: '100%', height: 'auto' }} 
-                  onError={(e) => console.error('Image load error:', e) }
-                />
+              {charts.length > 0 ? (
+                <div className="chart-scroll-container">
+                  {charts.map((chart, index) => (
+                    <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`}>
+                      <img 
+                        src={chart.url} 
+                        alt={`Generated Chart ${index + 1}`} 
+                        style={{ width: '20%', height: 'auto' }} // Reduced size to 20%
+                        onError={(e) => console.error('Image load error:', e)}
+                      />
+                      <div className="chart-timestamp">
+                        {new Date(chart.timestamp).toLocaleTimeString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <div className="chart-placeholder">No chart generated yet</div>
+                <div className="chart-placeholder">No charts generated yet</div>
               )}
             </div>
           </div>

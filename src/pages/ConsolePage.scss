@@ -454,6 +454,40 @@ $header-text-color: #1a237e; // Dark navy blue
             color: $light-text-color;
             font-style: italic;
           }
+
+          .chart-scroll-container {
+            max-height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            .chart-item {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              // Remove opacity and transition
+              position: relative; // Changed from absolute to relative
+              width: 100%;
+              // Remove height: 100%
+
+              &.active {
+                // Remove opacity: 1
+              }
+
+              img {
+                width: 20%; // Set width to 20%
+                height: auto;
+                object-fit: contain;
+              }
+
+              .chart-timestamp {
+                margin-top: 8px;
+                font-size: 12px;
+                color: $light-text-color;
+              }
+            }
+          }
         }
       }
     }
@@ -561,6 +595,81 @@ $header-text-color: #1a237e; // Dark navy blue
           flex: 1;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+
+  .chart-display {
+    .content-block-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .chart-navigation {
+        display: flex;
+        gap: 8px;
+
+        button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+          border-radius: 4px;
+          transition: background-color 0.2s;
+
+          &:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+
+    .content-block-body {
+      .chart-scroll-container {
+        max-height: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .chart-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+
+          &.active {
+            opacity: 1;
+            position: relative;
+          }
+
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+          }
+
+          .chart-timestamp {
+            margin-top: 8px;
+            font-size: 12px;
+            color: $light-text-color;
+          }
         }
       }
     }
