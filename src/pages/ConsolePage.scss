@@ -1,11 +1,14 @@
-// New color variables
-$primary-color: #4a90e2; // Soft blue
-$secondary-color: #50c878; // Emerald green
-$accent-color: #ff6b6b; // Soft red
-$background-color: #f8f9fa; // Light gray
-$text-color: #333333; // Dark gray
-$light-text-color: #777777; // Medium gray
-$border-color: #e0e0e0; // Light gray
+// Updated color variables
+$primary-color: #4a90e2; // Vibrant blue
+$secondary-color: #27ae60; // Rich green
+$accent-color: #e74c3c; // Bright red
+$background-color: #ffffff; // White background
+$text-color: #2c3e50; // Dark blue-gray for text
+$light-text-color: #7f8c8d; // Medium gray for light text
+$border-color: #bdc3c7; // Light gray for borders
+
+// Add this new color variable
+$header-text-color: #1a237e; // Dark navy blue
 
 [data-component='ConsolePage'] {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
@@ -18,9 +21,8 @@ $border-color: #e0e0e0; // Light gray
   color: $text-color;
 
   .content-top {
-    background-color: white;
-    padding: 16px 24px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px 16px; // Reduced padding
+    margin-bottom: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,51 +30,121 @@ $border-color: #e0e0e0; // Light gray
     .content-title {
       display: flex;
       align-items: center;
+      flex-shrink: 0; // Prevent title from shrinking
       
       .fxis-logo {
-        height: 40px;
-        margin-right: 16px;
+        height: 72px; // Slightly reduced from 96px
+        margin-right: 8px;
+        padding: 0;
       }
 
       span {
-        font-size: 24px;
-        font-weight: 500;
-        color: $primary-color;
+        font-size: 28px; // Slightly reduced from 33.6px
+        white-space: nowrap; // Prevent wrapping
       }
     }
 
     .content-controls {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 8px; // Reduced gap
+      flex-wrap: nowrap; // Prevent wrapping to next line
 
-      button {
-        background-color: $primary-color;
-        color: white;
-        border: none;
-        padding: 8px 16px;
+      button, 
+      .api-key-button,
+      .connection-status,
+      .Toggle {  // Add styles for the Toggle component
+        height: 28px; // Reduced from 32px
+        padding: 0 8px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 4px;
-        font-weight: 500;
-        transition: background-color 0.3s;
+        white-space: nowrap;
+      }
 
-        &:hover {
-          background-color: darken($primary-color, 10%);
+      .api-key-button {
+        max-width: 110px; // Increased from 90px
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background-color: transparent;
+        border: 1px solid $border-color;
+        padding: 0 6px; // Changed from padding-left to symmetric padding
+        direction: rtl; // This will make the text align from right to left
+        text-align: left; // This ensures the text starts from the left
+
+        // This will reverse the text back to normal left-to-right
+        span {
+          direction: ltr;
+          display: inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+        }
+      }
+
+      .connection-status {
+        padding: 0 10px;
+      }
+
+      // Specific styles for the Toggle component
+      .Toggle {
+        background-color: #f0f0f0;
+        border: 1px solid #d0d0d0;
+
+        .ToggleOption {
+          padding: 0 8px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+
+          &.selected {
+            background-color: $primary-color; // Changed from black to primary color
+            color: white;
+          }
+        }
+      }
+
+      // Style for the Connect button
+      button {
+        &.action {
+          background-color: $secondary-color; // Use secondary color for Connect button
+          color: white;
+
+          &:hover {
+            background-color: darken($secondary-color, 10%);
+          }
+        }
+      }
+
+      .custom-toggle {
+        background-color: #f0f0f0;
+        border: 1px solid #d0d0d0;
+        border-radius: 4px;
+        overflow: hidden;
+
+        button {
+          background-color: transparent;
+          border: none;
+          color: $text-color;
+          padding: 6px 12px;
+          transition: background-color 0.3s, color 0.3s;
+
+          &[aria-pressed="true"] {
+            background-color: $primary-color;
+            color: white;
+          }
         }
       }
     }
   }
 
-  .content-api-key {
-    padding: 8px 24px;
-    background-color: #e8f0fe;
-    color: $primary-color;
-    font-weight: 500;
-  }
-
   .content-main {
     flex-grow: 1;
     display: flex;
-    padding: 12px;
+    padding: 0 12px 12px; // Removed top padding
     gap: 12px;
     overflow: hidden;
 
@@ -89,10 +161,20 @@ $border-color: #e0e0e0; // Light gray
         overflow: hidden;
 
         .content-block-title {
-          padding: 8px 12px;
-          font-size: 16px;
+          padding: 0 12px; // Remove vertical padding
+          font-size: 14px;
           font-weight: 500;
-          border-bottom: 1px solid $border-color;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $primary-color, lighten($primary-color, 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px; // Fixed height
+          display: flex;
+          align-items: center; // Vertically center the text
+          margin: 0;
+          line-height: 36px; // Match the height for perfect centering
         }
 
         .content-block-body {
@@ -106,7 +188,10 @@ $border-color: #e0e0e0; // Light gray
         flex-grow: 1;
 
         .content-block-body {
-          padding: 4px;
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 16px;
+          max-height: calc(100% - 50px);
         }
 
         .conversation-item {
@@ -137,7 +222,7 @@ $border-color: #e0e0e0; // Light gray
       .content-bottom {
         display: flex;
         gap: 12px;
-        height: 180px;
+        height: 120px;
 
         .events,
         .visualization {
@@ -148,10 +233,20 @@ $border-color: #e0e0e0; // Light gray
 
         .visualization {
           .content-block-title {
-            padding: 8px 12px;
-            font-size: 16px;
+            padding: 0 12px; // Remove vertical padding
+            font-size: 14px;
             font-weight: 500;
-            border-bottom: 1px solid $border-color;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-image: linear-gradient(to right, $secondary-color, lighten($secondary-color, 15%));
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 36px; // Fixed height
+            display: flex;
+            align-items: center; // Vertically center the text
+            margin: 0;
+            line-height: 36px; // Match the height for perfect centering
           }
 
           .visualization-content {
@@ -176,7 +271,7 @@ $border-color: #e0e0e0; // Light gray
               canvas {
                 flex-grow: 1;
                 width: 100%;
-                height: 100px; // Set a fixed height
+                height: 60px;
               }
             }
           }
@@ -194,10 +289,20 @@ $border-color: #e0e0e0; // Light gray
         overflow: hidden;
 
         .content-block-title {
-          padding: 16px;
-          font-size: 18px;
+          padding: 0 12px; // Remove vertical padding
+          font-size: 14px;
           font-weight: 500;
-          border-bottom: 1px solid $border-color;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $secondary-color, lighten($secondary-color, 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px; // Fixed height
+          display: flex;
+          align-items: center; // Vertically center the text
+          margin: 0;
+          line-height: 36px; // Match the height for perfect centering
         }
 
         .content-block-body {
@@ -256,12 +361,12 @@ $border-color: #e0e0e0; // Light gray
 
     &.connected {
       background-color: $secondary-color;
-      color: white;
+      box-shadow: 0 2px 4px rgba(46, 204, 113, 0.3);
     }
 
     &.disconnected {
       background-color: $accent-color;
-      color: white;
+      box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
     }
   }
 

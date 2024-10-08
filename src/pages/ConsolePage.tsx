@@ -616,7 +616,8 @@ export function ConsolePage() {
   // Add this useEffect for auto-scrolling
   useEffect(() => {
     if (conversationRef.current) {
-      conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
+      const scrollElement = conversationRef.current;
+      scrollElement.scrollTop = scrollElement.scrollHeight;
     }
   }, [items]);
 
@@ -644,27 +645,26 @@ export function ConsolePage() {
             buttonStyle={isConnected ? 'regular' : 'action'}
             onClick={isConnected ? disconnectConversation : connectConversation}
           />
+          {!LOCAL_RELAY_SERVER_URL && (
+            <Button
+              icon={Edit}
+              iconPosition="end"
+              buttonStyle="flush"
+              className="api-key-button"
+              onClick={() => resetAPIKey()}
+              label={`API KEY: ${apiKey.slice(0, 3)}...`}  // Add this line
+            />
+          )}
           <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
             {isConnected ? 'Connected' : 'Disconnected'}
           </div>
         </div>
       </div>
-      <div className="content-api-key">
-        {!LOCAL_RELAY_SERVER_URL && (
-          <Button
-            icon={Edit}
-            iconPosition="end"
-            buttonStyle="flush"
-            label={`API KEY: ${apiKey.slice(0, 3)}...`}
-            onClick={() => resetAPIKey()}
-          />
-        )}
-      </div>
       <div className="content-main">
         <div className="content-logs">
           <div className="content-block conversation">
             <div className="content-block-title">CONVERSATION</div>
-            <div className="content-block-body" data-conversation-content ref={conversationRef}>
+            <div className="content-block-body" ref={conversationRef}>
               {!items.length && `awaiting connection...`}
               {items.map((conversationItem, i) => (
                 <div className="conversation-item" key={conversationItem.id}>
