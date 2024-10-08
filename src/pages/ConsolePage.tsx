@@ -613,7 +613,7 @@ export function ConsolePage() {
           body: JSON.stringify({ 
             question,
             overrideConfig: {
-              sessionId: sessionId // Include the session ID here
+              sessionId: sessionId
             }
           })
         };
@@ -626,11 +626,32 @@ export function ConsolePage() {
           }
 
           const contentType = response.headers.get("Content-Type");
+          console.log('Response Content-Type:', contentType);
 
           if (contentType && contentType.includes("application/json")) {
             const jsonResponse = await response.json();
-            console.log('JSON Response:', jsonResponse);
-            return jsonResponse;
+            console.log('JSON Response:', JSON.stringify(jsonResponse, null, 2));
+            
+            if (jsonResponse.artifacts && jsonResponse.artifacts.length > 0) {
+              const imageArtifact = jsonResponse.artifacts.find((artifact: any) => artifact.type === 'png' || artifact.type === 'gif');
+              if (imageArtifact) {
+                console.log('Image artifact found:', imageArtifact);
+                if (imageArtifact.data.startsWith('FILE-STORAGE::')) {
+                  const fileName = imageArtifact.data.replace('FILE-STORAGE::', '');
+                  const imageUrl = `https://flowise2-4vzn.onrender.com/api/v1/get-upload-file?chatflowId=1bca2aa1-cadf-4916-9ab4-d4d92d2590bc&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
+                  console.log('Setting image URL:', imageUrl);
+                  setImageUrl(imageUrl);
+                  return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
+                } else {
+                  const imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
+                  console.log('Setting image URL from artifact');
+                  setImageUrl(imageUrl);
+                  return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
+                }
+              }
+            }
+            
+            return jsonResponse.text || JSON.stringify(jsonResponse);
           } else if (contentType && (contentType.includes("text/plain") || contentType.includes("application/octet-stream"))) {
             const textResponse = await response.text();
             console.log('Text Response:', textResponse);
@@ -638,9 +659,11 @@ export function ConsolePage() {
           } else if (contentType && contentType.includes("image/")) {
             const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
+            console.log('Image blob URL:', imageUrl);
             setImageUrl(imageUrl);
-            return "Image generated successfully. It will be displayed in the chart area.";
+            return "Image blob received. It will be displayed in the chart area.";
           } else {
+            console.log('Unknown response type:', contentType);
             return 'Unknown response type';
           }
         } catch (error) {
@@ -906,7 +929,12 @@ export function ConsolePage() {
             <div className="content-block-title">CHART DISPLAY</div>
             <div className="content-block-body">
               {imageUrl ? (
-                <img src={imageUrl} alt="Generated Chart" style={{ maxWidth: '100%', height: 'auto' }} />
+                <img 
+                  src={imageUrl} 
+                  alt="Generated Chart" 
+                  style={{ maxWidth: '100%', height: 'auto' }} 
+                  onError={(e) => console.error('Image load error:', e) }
+                />
               ) : (
                 <div className="chart-placeholder">No chart generated yet</div>
               )}
