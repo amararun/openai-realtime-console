@@ -610,6 +610,16 @@ export function ConsolePage() {
     changeTurnEndType('server_vad');
   }, []);
 
+  // Add this useRef for the conversation container
+  const conversationRef = useRef<HTMLDivElement>(null);
+
+  // Add this useEffect for auto-scrolling
+  useEffect(() => {
+    if (conversationRef.current) {
+      conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
+    }
+  }, [items]);
+
   /**
    * Render the application
    */
@@ -654,69 +664,48 @@ export function ConsolePage() {
         <div className="content-logs">
           <div className="content-block conversation">
             <div className="content-block-title">CONVERSATION</div>
-            <div className="content-block-body" data-conversation-content>
+            <div className="content-block-body" data-conversation-content ref={conversationRef}>
               {!items.length && `awaiting connection...`}
-              {items.map((conversationItem, i) => {
-                console.log('Rendering conversation item:', conversationItem);
-                console.log('Item role:', conversationItem.role);
-                console.log('Item content:', conversationItem.formatted);
-                return (
-                  <div className="conversation-item" key={conversationItem.id}>
-                    <div className={`speaker ${conversationItem.role || ''}`}>
-                      <div>
-                        {(conversationItem.role || conversationItem.type).replaceAll('_', ' ')}
-                      </div>
-                      <div
-                        className="close"
-                        onClick={() =>
-                          deleteConversationItem(conversationItem.id)
-                        }
-                      >
-                        <X />
-                      </div>
-                    </div>
-                    <div className={`speaker-content`}>
-                      {conversationItem.type === 'function_call_output' && (
-                        <div dangerouslySetInnerHTML={{
-                          __html: formatText(conversationItem.formatted.output || '')
-                        }} />
-                      )}
-                      {conversationItem.formatted.tool && (
-                        <div>
-                          {conversationItem.formatted.tool.name}(
-                          {JSON.stringify(conversationItem.formatted.tool.arguments)})
-                        </div>
-                      )}
-                      {conversationItem.role === 'user' && (
-                        <div dangerouslySetInnerHTML={{
-                          __html: formatText(
-                            conversationItem.formatted.transcript ||
-                            (conversationItem.formatted.audio?.length
-                              ? '(awaiting transcript)'
-                              : conversationItem.formatted.text ||
-                                '(item sent)')
-                          )
-                        }} />
-                      )}
-                      {conversationItem.role === 'assistant' && (
-                        <div dangerouslySetInnerHTML={{
-                          __html: formatText(
-                            conversationItem.formatted.transcript ||
-                            conversationItem.formatted.text ||
-                            '(truncated)'
-                          )
-                        }} />
-                      )}
-                      {conversationItem.formatted.file && (
-                        <audio
-                          src={conversationItem.formatted.file.url}
-                          controls
-                        />
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+              {items.map((conversationItem, i) => (
+                <div className="conversation-item" key={conversationItem.id}>
+                  <span className={`speaker ${conversationItem.role || ''}`}>
+                    {(conversationItem.role || conversationItem.type).replaceAll('_', ' ')}:
+                  </span>
+                  <span className="speaker-content">
+                    {conversationItem.type === 'function_call_output' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(conversationItem.formatted.output || '')
+                      }} />
+                    )}
+                    {conversationItem.formatted.tool && (
+                      <span>
+                        {conversationItem.formatted.tool.name}(
+                        {JSON.stringify(conversationItem.formatted.tool.arguments)})
+                      </span>
+                    )}
+                    {conversationItem.role === 'user' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(
+                          conversationItem.formatted.transcript ||
+                          (conversationItem.formatted.audio?.length
+                            ? '(awaiting transcript)'
+                            : conversationItem.formatted.text ||
+                              '(item sent)')
+                        )
+                      }} />
+                    )}
+                    {conversationItem.role === 'assistant' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(
+                          conversationItem.formatted.transcript ||
+                          conversationItem.formatted.text ||
+                          '(truncated)'
+                        )
+                      }} />
+                    )}
+                  </span>
+                </div>
+              ))}
               {isWaitingForResponse && (
                 <div className="waiting-for-response">Waiting for assistant response...</div>
               )}
@@ -729,21 +718,17 @@ export function ConsolePage() {
                 {!realtimeEvents.length && `awaiting connection...`}
                 {realtimeEvents.map((realtimeEvent, i) => (
                   <div className="event" key={realtimeEvent.event.event_id}>
-                    <div className="event-timestamp">
+                    <span className="event-timestamp">
                       {formatTime(realtimeEvent.time)}
-                    </div>
-                    <div className="event-details">
-                      <div className="event-summary">
-                        <div className={`event-source ${realtimeEvent.source}`}>
-                          {realtimeEvent.source === 'client' ? <ArrowUp /> : <ArrowDown />}
-                          <span>{realtimeEvent.source}</span>
-                        </div>
-                        <div className="event-type">
-                          {realtimeEvent.event.type}
-                          {realtimeEvent.count && ` (${realtimeEvent.count})`}
-                        </div>
-                      </div>
-                    </div>
+                    </span>
+                    <span className={`event-source ${realtimeEvent.source}`}>
+                      {realtimeEvent.source === 'client' ? <ArrowUp /> : <ArrowDown />}
+                      {realtimeEvent.source}
+                    </span>
+                    <span className="event-type">
+                      {realtimeEvent.event.type}
+                      {realtimeEvent.count && ` (${realtimeEvent.count})`}
+                    </span>
                   </div>
                 ))}
               </div>
