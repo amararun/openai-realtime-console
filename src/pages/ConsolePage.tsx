@@ -33,6 +33,8 @@ import { isJsxOpeningLikeElement } from 'typescript';
 // Add this import at the top of the file
 import { RingLoader } from 'react-spinners';
 
+import { v4 as uuidv4 } from 'uuid'; // Add this import at the top of the file
+
 /**
  * Type for result from get_weather() function call
  */
@@ -153,6 +155,13 @@ export function ConsolePage() {
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
+  const [sessionId, setSessionId] = useState<string>('');
+
+  // Function to generate a new session ID
+  const generateSessionId = () => {
+    return uuidv4();
+  };
+
   // Add this function to handle manual refresh
   const handleRefresh = () => {
     setIframeKey(prevKey => prevKey + 1);
@@ -205,6 +214,10 @@ export function ConsolePage() {
     setIsConnected(false);  // Reset connection status
     setRealtimeEvents([]);
     setItems([]);
+
+    // Generate a new session ID when connecting
+    const newSessionId = generateSessionId();
+    setSessionId(newSessionId);
 
     try {
       // Connect to microphone
@@ -597,7 +610,12 @@ export function ConsolePage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ question })
+          body: JSON.stringify({ 
+            question,
+            overrideConfig: {
+              sessionId: sessionId // Include the session ID here
+            }
+          })
         };
 
         try {
@@ -684,7 +702,7 @@ export function ConsolePage() {
       // cleanup; resets to defaults
       client.reset();
     };
-  }, []);
+  }, [sessionId]); // Add sessionId to the dependency array
 
   useEffect(() => {
     changeTurnEndType('server_vad');
