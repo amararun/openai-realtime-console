@@ -57,6 +57,16 @@ interface RealtimeEvent {
   event: { [key: string]: any };
 }
 
+const formatText = (text: string) => {
+  if (!text) return '';
+  return text
+    .replace(/\\n/g, '\n')  // Replace \n with actual newlines
+    .replace(/\n\n/g, '<br/><br/>')  // Replace double newlines with double line breaks
+    .replace(/\n/g, '<br/>')  // Replace single newlines with line breaks
+    .replace(/\s-\s/g, '<br/>- ')  // Replace " - " with a line break and bullet point
+    .trim();  // Trim any leading or trailing whitespace
+};
+
 export function ConsolePage() {
   /**
    * Ask user for API Key
@@ -119,7 +129,7 @@ export function ConsolePage() {
     [key: string]: boolean;
   }>({});
   const [isConnected, setIsConnected] = useState(false);
-  const [canPushToTalk, setCanPushToTalk] = useState(true);
+  const [canPushToTalk, setCanPushToTalk] = useState(false);  // Changed from true to false
   const [isRecording, setIsRecording] = useState(false);
   const [memoryKv, setMemoryKv] = useState<{ [key: string]: any }>({});
   const [coords, setCoords] = useState<Coordinates | null>({
@@ -130,6 +140,8 @@ export function ConsolePage() {
 
   const [showEvents, setShowEvents] = useState(false);
   const [showEventsPopup, setShowEventsPopup] = useState(false);
+
+  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
 
   /**
    * Utility for formatting the timing of logs
@@ -175,28 +187,48 @@ export function ConsolePage() {
 
     // Set state variables
     startTimeRef.current = new Date().toISOString();
-    setIsConnected(true);
+    setIsConnected(false);  // Reset connection status
     setRealtimeEvents([]);
-    setItems(client.conversation.getItems());
+    setItems([]);
 
-    // Connect to microphone
-    await wavRecorder.begin();
+    try {
+      // Connect to microphone
+      await wavRecorder.begin();
 
-    // Connect to audio output
-    await wavStreamPlayer.connect();
+      // Connect to audio output
+      await wavStreamPlayer.connect();
 
-    // Connect to realtime API
-    await client.connect();
-    client.sendUserMessageContent([
-      {
-        type: `input_text`,
-        text: `Hello!`,
-        // text: `For testing purposes, I want you to list ten car brands. Number each item, e.g. "one (or whatever number you are one): the item name".`
-      },
-    ]);
+      // Connect to realtime API
+      await client.connect();
+      console.log('Connected to Realtime API');
+      setIsConnected(true);
 
-    if (client.getTurnDetectionType() === 'server_vad') {
-      await wavRecorder.record((data) => client.appendInputAudio(data.mono));
+      // Wait a bit to ensure the connection is established
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      if (client.isConnected()) {
+        console.log('Sending initial message');
+        await client.sendUserMessageContent([
+          {
+            type: `input_text`,
+            text: `Hello!`,
+          },
+        ]);
+
+        if (client.getTurnDetectionType() === 'server_vad') {
+          await wavRecorder.record((data) => {
+            if (client.isConnected()) {
+              client.appendInputAudio(data.mono);
+            }
+          });
+        }
+      } else {
+        console.error('Failed to connect to Realtime API');
+        setIsConnected(false);
+      }
+    } catch (error) {
+      console.error('Error connecting:', error);
+      setIsConnected(false);
     }
   }, []);
 
@@ -235,6 +267,7 @@ export function ConsolePage() {
    */
   const startRecording = async () => {
     setIsRecording(true);
+    setIsWaitingForResponse(false);  // Reset this when starting to record
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
     const wavStreamPlayer = wavStreamPlayerRef.current;
@@ -256,6 +289,7 @@ export function ConsolePage() {
    */
   const stopRecording = async () => {
     setIsRecording(false);
+    setIsWaitingForResponse(true);  // Set this to true when stopping recording
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
     
@@ -547,6 +581,7 @@ export function ConsolePage() {
       }
     });
     client.on('conversation.updated', async ({ item, delta }: any) => {
+      console.log('Conversation updated:', item, delta);
       const items = client.conversation.getItems();
       if (delta?.audio) {
         wavStreamPlayer.add16BitPCM(delta.audio, item.id);
@@ -560,6 +595,7 @@ export function ConsolePage() {
         item.formatted.file = wavFile;
       }
       setItems(items);
+      setIsWaitingForResponse(false);
     });
 
     setItems(client.conversation.getItems());
@@ -568,6 +604,10 @@ export function ConsolePage() {
       // cleanup; resets to defaults
       client.reset();
     };
+  }, []);
+
+  useEffect(() => {
+    changeTurnEndType('server_vad');
   }, []);
 
   /**
@@ -580,21 +620,25 @@ export function ConsolePage() {
           <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
           <span>Realtime Analytics Assistant</span>
         </div>
-        <div className="content-api-key">
-          {!LOCAL_RELAY_SERVER_URL && (
-            <Button
-              icon={Edit}
-              iconPosition="end"
-              buttonStyle="flush"
-              label={`api key: ${apiKey.slice(0, 3)}...`}
-              onClick={() => resetAPIKey()}
-            />
-          )}
+        <div className="content-controls">
+          <Toggle
+            defaultValue={true}
+            labels={['MANUAL', 'VAD']}
+            values={['none', 'server_vad']}
+            onChange={(_, value) => changeTurnEndType(value)}
+          />
+          <Button
+            label={isConnected ? 'DISCONNECT' : 'CONNECT'}
+            iconPosition={isConnected ? 'end' : 'start'}
+            icon={isConnected ? X : Zap}
+            buttonStyle={isConnected ? 'regular' : 'action'}
+            onClick={isConnected ? disconnectConversation : connectConversation}
+          />
           <Button
             icon={AlertCircle}
             iconPosition="start"
             buttonStyle="regular"
-            label="Show Events"
+            label="SHOW EVENTS"
             onClick={() => setShowEventsPopup(true)}
           />
           <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
@@ -602,20 +646,32 @@ export function ConsolePage() {
           </div>
         </div>
       </div>
+      <div className="content-api-key">
+        {!LOCAL_RELAY_SERVER_URL && (
+          <Button
+            icon={Edit}
+            iconPosition="end"
+            buttonStyle="flush"
+            label={`API KEY: ${apiKey.slice(0, 3)}...`}
+            onClick={() => resetAPIKey()}
+          />
+        )}
+      </div>
       <div className="content-main">
         <div className="content-logs">
           <div className="content-block conversation">
-            <div className="content-block-title">conversation</div>
+            <div className="content-block-title">CONVERSATION</div>
             <div className="content-block-body" data-conversation-content>
               {!items.length && `awaiting connection...`}
               {items.map((conversationItem, i) => {
+                console.log('Rendering conversation item:', conversationItem);
+                console.log('Item role:', conversationItem.role);
+                console.log('Item content:', conversationItem.formatted);
                 return (
                   <div className="conversation-item" key={conversationItem.id}>
                     <div className={`speaker ${conversationItem.role || ''}`}>
                       <div>
-                        {(
-                          conversationItem.role || conversationItem.type
-                        ).replaceAll('_', ' ')}
+                        {(conversationItem.role || conversationItem.type).replaceAll('_', ' ')}
                       </div>
                       <div
                         className="close"
@@ -627,35 +683,37 @@ export function ConsolePage() {
                       </div>
                     </div>
                     <div className={`speaker-content`}>
-                      {/* tool response */}
                       {conversationItem.type === 'function_call_output' && (
-                        <div>{conversationItem.formatted.output}</div>
+                        <div dangerouslySetInnerHTML={{
+                          __html: formatText(conversationItem.formatted.output || '')
+                        }} />
                       )}
-                      {/* tool call */}
-                      {!!conversationItem.formatted.tool && (
+                      {conversationItem.formatted.tool && (
                         <div>
                           {conversationItem.formatted.tool.name}(
-                          {conversationItem.formatted.tool.arguments})
+                          {JSON.stringify(conversationItem.formatted.tool.arguments)})
                         </div>
                       )}
-                      {!conversationItem.formatted.tool &&
-                        conversationItem.role === 'user' && (
-                          <div>
-                            {conversationItem.formatted.transcript ||
-                              (conversationItem.formatted.audio?.length
-                                ? '(awaiting transcript)'
-                                : conversationItem.formatted.text ||
-                                  '(item sent)')}
-                          </div>
-                        )}
-                      {!conversationItem.formatted.tool &&
-                        conversationItem.role === 'assistant' && (
-                          <div>
-                            {conversationItem.formatted.transcript ||
-                              conversationItem.formatted.text ||
-                              '(truncated)'}
-                          </div>
-                        )}
+                      {conversationItem.role === 'user' && (
+                        <div dangerouslySetInnerHTML={{
+                          __html: formatText(
+                            conversationItem.formatted.transcript ||
+                            (conversationItem.formatted.audio?.length
+                              ? '(awaiting transcript)'
+                              : conversationItem.formatted.text ||
+                                '(item sent)')
+                          )
+                        }} />
+                      )}
+                      {conversationItem.role === 'assistant' && (
+                        <div dangerouslySetInnerHTML={{
+                          __html: formatText(
+                            conversationItem.formatted.transcript ||
+                            conversationItem.formatted.text ||
+                            '(truncated)'
+                          )
+                        }} />
+                      )}
                       {conversationItem.formatted.file && (
                         <audio
                           src={conversationItem.formatted.file.url}
@@ -666,19 +724,16 @@ export function ConsolePage() {
                   </div>
                 );
               })}
+              {isWaitingForResponse && (
+                <div className="waiting-for-response">Waiting for assistant response...</div>
+              )}
             </div>
           </div>
           <div className="content-actions">
-            <Toggle
-              defaultValue={false}
-              labels={['manual', 'vad']}
-              values={['none', 'server_vad']}
-              onChange={(_, value) => changeTurnEndType(value)}
-            />
             <div className="spacer" />
             {isConnected && canPushToTalk && (
               <Button
-                label={isRecording ? 'release to send' : 'push to talk'}
+                label={isRecording ? 'RELEASE TO SEND' : 'PUSH TO TALK'}
                 buttonStyle={isRecording ? 'alert' : 'regular'}
                 disabled={!isConnected || !canPushToTalk}
                 onMouseDown={startRecording}
@@ -686,20 +741,11 @@ export function ConsolePage() {
               />
             )}
             <div className="spacer" />
-            <Button
-              label={isConnected ? 'disconnect' : 'connect'}
-              iconPosition={isConnected ? 'end' : 'start'}
-              icon={isConnected ? X : Zap}
-              buttonStyle={isConnected ? 'regular' : 'action'}
-              onClick={
-                isConnected ? disconnectConversation : connectConversation
-              }
-            />
           </div>
         </div>
         <div className="content-right">
           <div className="content-block kv">
-            <div className="content-block-title">Quick Notes</div>
+            <div className="content-block-title">QUICK NOTES</div>
             <div className="content-block-body content-kv">
               {Object.entries(memoryKv).map(([key, value], index) => (
                 <div key={index}>

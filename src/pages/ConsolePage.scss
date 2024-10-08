@@ -36,6 +36,17 @@
         font-weight: bold; // Optional: makes the text bold
       }
     }
+    .content-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+
+      button {
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+    }
   }
 
   .content-main {
@@ -356,4 +367,11 @@
     background-color: #F44336;
     color: white;
   }
+}
+
+.waiting-for-response {
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+  color: #666;
 }
