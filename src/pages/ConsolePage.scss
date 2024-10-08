@@ -139,12 +139,47 @@ $border-color: #e0e0e0; // Light gray
         gap: 12px;
         height: 180px;
 
-        .events {
-          flex: 2;
+        .events,
+        .visualization {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .visualization {
-          flex: 1;
+          .content-block-title {
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 1px solid $border-color;
+          }
+
+          .visualization-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            flex-grow: 1;
+            padding: 8px;
+
+            .visualization-entry {
+              width: 48%;
+              display: flex;
+              flex-direction: column;
+
+              span {
+                font-size: 12px;
+                text-align: center;
+                margin-bottom: 4px;
+              }
+
+              canvas {
+                flex-grow: 1;
+                width: 100%;
+                height: 100px; // Set a fixed height
+              }
+            }
+          }
         }
       }
     }
