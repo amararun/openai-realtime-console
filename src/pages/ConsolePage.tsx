@@ -19,7 +19,7 @@ import { WavRecorder, WavStreamPlayer } from '../lib/wavtools/index.js';
 import { instructions } from '../utils/conversation_config.js';
 import { WavRenderer } from '../utils/wav_renderer';
 
-import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle } from 'react-feather';
+import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle, Loader } from 'react-feather';
 import { Button } from '../components/button/Button';
 import { Toggle } from '../components/toggle/Toggle';
 import { Map } from '../components/Map';
@@ -143,6 +143,9 @@ export function ConsolePage() {
 
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
 
+  // Add this new state
+  const [isActive, setIsActive] = useState(false);
+
   /**
    * Utility for formatting the timing of logs
    */
@@ -201,7 +204,7 @@ export function ConsolePage() {
       // Connect to realtime API
       await client.connect();
       console.log('Connected to Realtime API');
-      setIsConnected(true);
+      setIsConnected(true);  // Set to true when connected
 
       // Wait a bit to ensure the connection is established
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -236,7 +239,7 @@ export function ConsolePage() {
    * Disconnect and reset conversation state
    */
   const disconnectConversation = useCallback(async () => {
-    setIsConnected(false);
+    setIsConnected(false);  // Set to false when disconnecting
     setRealtimeEvents([]);
     setItems([]);
     setMemoryKv({});
@@ -585,6 +588,10 @@ export function ConsolePage() {
       const items = client.conversation.getItems();
       if (delta?.audio) {
         wavStreamPlayer.add16BitPCM(delta.audio, item.id);
+        // Set isActive to true when there's voice activity
+        setIsActive((prevIsActive) => true);
+        // Reset isActive after 2 seconds of inactivity
+        setTimeout(() => setIsActive((prevIsActive) => false), 2000);
       }
       if (item.status === 'completed' && item.formatted.audio?.length) {
         const wavFile = await WavRecorder.decode(
@@ -631,6 +638,11 @@ export function ConsolePage() {
           <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
           <span>Realtime Analytics Assistant</span>
         </div>
+        {isConnected && (
+          <div className="voice-activity-indicator">
+            <div className="spinner-bar"></div>
+          </div>
+        )}
         <div className="content-controls">
           <Toggle
             defaultValue={true}
@@ -779,4 +791,8 @@ export function ConsolePage() {
       </footer>
     </div>
   );
+}
+
+function setIsActive(arg0: (prevIsActive: any) => boolean) {
+  throw new Error('Function not implemented.');
 }
