@@ -173,8 +173,14 @@ export function ConsolePage() {
   };
 
   // Add these new state variables
-  const [sheetType, setSheetType] = useState<'google' | 'excel'>('google');
+  const [sheetType, setSheetType] = useState<'google' | 'excel' | 'docs'>('google');
   const [excelSheetUrl] = useState('https://harolikar-my.sharepoint.com/personal/amar_harolikar_com/_layouts/15/Doc.aspx?sourcedoc={371a2aba-3da4-4966-8d5a-e02eb2038845}&action=embedview&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True');
+
+  // Add this new constant for the Google Docs URL
+  const googleDocsUrl = "https://docs.google.com/document/d/e/2PACX-1vQ2z_n6-egJOrvFLMXsIBWvhxoPg01fS2XMchIJ-993uqD9YbaNbw9H1ZTD09CzeZ-VetsRNML2p3qF/pub?embedded=true";
+
+  // Add this new constant for the Google Docs editable URL
+  const googleDocsEditableUrl = "https://docs.google.com/document/d/1v8BQURR8F6yoVlxGMmjPE9hEJAsLyx7cjtjiNLiXkhk/edit?usp=sharing";
 
   // Update the handleRefresh function
   const handleRefresh = useCallback(() => {
@@ -182,7 +188,9 @@ export function ConsolePage() {
     const timestamp = new Date().getTime();
     const newUrl = sheetType === 'google' 
       ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false&rand=${timestamp}`
-      : `${excelSheetUrl}&rand=${timestamp}`;
+      : sheetType === 'excel'
+      ? `${excelSheetUrl}&rand=${timestamp}`
+      : `${googleDocsUrl}&rand=${timestamp}`;
     
     console.log('Refreshing sheet with new URL:', newUrl);
 
@@ -196,14 +204,16 @@ export function ConsolePage() {
     setTimeout(() => {
       setIsSheetLoading(false);
     }, 2000);
-  }, [sheetType, excelSheetUrl]);
+  }, [sheetType, excelSheetUrl, googleDocsUrl]);
 
-  // Add this function to handle sheet type change
-  const handleSheetTypeChange = (type: 'google' | 'excel') => {
+  // Update the handleSheetTypeChange function
+  const handleSheetTypeChange = (type: 'google' | 'excel' | 'docs') => {
     setSheetType(type);
     setSheetUrl(type === 'google' 
       ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false`
-      : excelSheetUrl
+      : type === 'excel'
+      ? excelSheetUrl
+      : googleDocsUrl
     );
     setIframeKey(prevKey => prevKey + 1);
   };
@@ -1034,7 +1044,7 @@ export function ConsolePage() {
           </div>
           <div className="content-block google-sheets">
             <div className="content-block-title">
-              SHEETS
+              SHEETS & DOCS
               <div className="sheet-controls">
                 <div className="sheet-type-toggle">
                   <button 
@@ -1048,6 +1058,12 @@ export function ConsolePage() {
                     onClick={() => handleSheetTypeChange('excel')}
                   >
                     Excel
+                  </button>
+                  <button 
+                    className={sheetType === 'docs' ? 'active' : ''} 
+                    onClick={() => handleSheetTypeChange('docs')}
+                  >
+                    Docs
                   </button>
                 </div>
                 <button className="refresh-button" onClick={handleRefresh} disabled={isSheetLoading}>
@@ -1064,9 +1080,7 @@ export function ConsolePage() {
                 <iframe
                   ref={iframeRef}
                   key={iframeKey}
-                  src={sheetType === 'google' 
-                    ? sheetUrl
-                    : excelSheetUrl}
+                  src={sheetUrl}
                   width="100%"
                   height="100%"
                   frameBorder="0"
@@ -1095,7 +1109,9 @@ export function ConsolePage() {
             <iframe
               src={sheetType === 'google' 
                 ? "https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
-                : excelSheetUrl}
+                : sheetType === 'excel'
+                ? excelSheetUrl
+                : googleDocsEditableUrl}
               width="100%"
               height="100%"
               frameBorder="0"

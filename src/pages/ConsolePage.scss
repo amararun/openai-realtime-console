@@ -877,6 +877,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 4px 8px;
           cursor: pointer;
           transition: background-color 0.2s;
+          font-size: 12px; // Reduce font size to fit three buttons
 
           &.active {
             background-color: rgba(255, 255, 255, 0.2);
