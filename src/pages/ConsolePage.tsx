@@ -172,10 +172,53 @@ export function ConsolePage() {
     return uuidv4();
   };
 
-  // Add this function to handle manual refresh
-  const handleRefresh = () => {
+  // Add these new state variables
+  const [sheetType, setSheetType] = useState<'google' | 'excel'>('google');
+  const [excelSheetUrl] = useState('https://harolikar-my.sharepoint.com/personal/amar_harolikar_com/_layouts/15/Doc.aspx?sourcedoc={371a2aba-3da4-4966-8d5a-e02eb2038845}&action=embedview&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True');
+
+  // Update the handleRefresh function
+  const handleRefresh = useCallback(() => {
+    setIsSheetLoading(true);
+    const timestamp = new Date().getTime();
+    const newUrl = sheetType === 'google' 
+      ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false&rand=${timestamp}`
+      : `${excelSheetUrl}&rand=${timestamp}`;
+    
+    console.log('Refreshing sheet with new URL:', newUrl);
+
+    if (iframeRef.current) {
+      iframeRef.current.src = newUrl;
+    }
+
+    setSheetUrl(newUrl);
+    setIframeKey(prevKey => prevKey + 1);
+
+    setTimeout(() => {
+      setIsSheetLoading(false);
+    }, 2000);
+  }, [sheetType, excelSheetUrl]);
+
+  // Add this function to handle sheet type change
+  const handleSheetTypeChange = (type: 'google' | 'excel') => {
+    setSheetType(type);
+    setSheetUrl(type === 'google' 
+      ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false`
+      : excelSheetUrl
+    );
     setIframeKey(prevKey => prevKey + 1);
   };
+
+  // Add this state variable at the top of your component
+  const [sheetUrl, setSheetUrl] = useState(`https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false`);
+
+  const [isSheetLoading, setIsSheetLoading] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleIframeLoad = useCallback(() => {
+    console.log('Iframe loaded via onLoad event');
+    setIsSheetLoading(false);
+  }, []);
 
   /**
    * Utility for formatting the timing of logs
@@ -991,10 +1034,24 @@ export function ConsolePage() {
           </div>
           <div className="content-block google-sheets">
             <div className="content-block-title">
-              GOOGLE SHEETS
+              SHEETS
               <div className="sheet-controls">
-                <button className="refresh-button" onClick={handleRefresh}>
-                  <RefreshCw size={16} />
+                <div className="sheet-type-toggle">
+                  <button 
+                    className={sheetType === 'google' ? 'active' : ''} 
+                    onClick={() => handleSheetTypeChange('google')}
+                  >
+                    Google
+                  </button>
+                  <button 
+                    className={sheetType === 'excel' ? 'active' : ''} 
+                    onClick={() => handleSheetTypeChange('excel')}
+                  >
+                    Excel
+                  </button>
+                </div>
+                <button className="refresh-button" onClick={handleRefresh} disabled={isSheetLoading}>
+                  {isSheetLoading ? <Loader size={16} /> : <RefreshCw size={16} />}
                 </button>
                 <button className="expand-sheet" onClick={openSheetModal}>
                   <Maximize2 size={16} />
@@ -1002,14 +1059,18 @@ export function ConsolePage() {
               </div>
             </div>
             <div className="content-block-body">
-              <div className="iframe-container">
+              <div className="iframe-container" ref={iframeContainerRef}>
+                {isSheetLoading && <div className="loading-overlay">Refreshing...</div>}
                 <iframe
+                  ref={iframeRef}
                   key={iframeKey}
-                  src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false"
+                  src={sheetUrl}
                   width="100%"
                   height="100%"
                   frameBorder="0"
-                ></iframe>
+                  onLoad={handleIframeLoad}
+                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                />
               </div>
             </div>
           </div>
@@ -1030,7 +1091,9 @@ export function ConsolePage() {
         <div className="modal-overlay" onClick={() => setIsSheetModalOpen(false)}>
           <div className="modal-content sheet-modal" onClick={(e) => e.stopPropagation()}>
             <iframe
-              src="https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
+              src={sheetType === 'google' 
+                ? "https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
+                : excelSheetUrl}
               width="100%"
               height="100%"
               frameBorder="0"
