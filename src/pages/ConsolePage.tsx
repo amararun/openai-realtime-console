@@ -19,7 +19,7 @@ import { WavRecorder, WavStreamPlayer } from '../lib/wavtools/index.js';
 import { instructions } from '../utils/conversation_config.js';
 import { WavRenderer } from '../utils/wav_renderer';
 
-import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle, Loader, RefreshCw } from 'react-feather';
+import { X, Edit, Zap, ArrowUp, ArrowDown, ChevronDown, ChevronUp, AlertCircle, Loader, RefreshCw, Maximize2 } from 'react-feather';
 import { Button } from '../components/button/Button';
 import { Toggle } from '../components/toggle/Toggle';
 import { Map } from '../components/Map';
@@ -156,6 +156,16 @@ export function ConsolePage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const [sessionId, setSessionId] = useState<string>('');
+
+  // Add these state variables inside the ConsolePage component
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalChartUrl, setModalChartUrl] = useState('');
+
+  // Add this function inside the ConsolePage component
+  const openModal = (chartUrl: string) => {
+    setModalChartUrl(chartUrl);
+    setIsModalOpen(true);
+  };
 
   // Function to generate a new session ID
   const generateSessionId = () => {
@@ -942,12 +952,21 @@ export function ConsolePage() {
               </div>
               <div className="content-block-body">
                 <div className="chart-scroll-container">
-                  {charts.map((chart, index) => (
-                    <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`} style={{display: index === currentChartIndex ? 'flex' : 'none'}}>
-                      <img src={chart.url} alt={`Generated Chart ${index + 1}`} />
-                      <div className="chart-timestamp">{new Date(chart.timestamp).toLocaleTimeString()}</div>
+                  {charts.length > 0 ? (
+                    charts.map((chart, index) => (
+                      <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`} style={{display: index === currentChartIndex ? 'flex' : 'none'}}>
+                        <img src={chart.url} alt={`Generated Chart ${index + 1}`} />
+                        <div className="chart-timestamp">{new Date(chart.timestamp).toLocaleTimeString()}</div>
+                        <button className="expand-chart" onClick={() => openModal(chart.url)}>
+                          <Maximize2 size={16} />
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="chart-item active">
+                      <img src={`${process.env.PUBLIC_URL}/chart_line_dummy.png`} alt="Placeholder Chart" />
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>
@@ -984,6 +1003,14 @@ export function ConsolePage() {
       <footer className="content-footer">
         <span>Amar Harolikar | Applied Gen AI for Data Science, Analytics and Business</span>
       </footer>
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <img src={modalChartUrl} alt="Expanded Chart" />
+            <button className="close-modal" onClick={() => setIsModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
