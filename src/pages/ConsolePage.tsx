@@ -1005,7 +1005,7 @@ export function ConsolePage() {
               <div className="iframe-container">
                 <iframe
                   key={iframeKey}
-                  src="https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
+                  src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false"
                   width="100%"
                   height="100%"
                   frameBorder="0"
