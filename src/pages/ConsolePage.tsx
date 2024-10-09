@@ -653,7 +653,7 @@ export function ConsolePage() {
       {
         name: 'tool_multitask_api',
         description:
-          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Use this tool when the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+        'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart or doing statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Use this tool when the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -851,6 +851,12 @@ export function ConsolePage() {
     setIsSheetModalOpen(true);
   };
 
+  const [isConversationModalOpen, setIsConversationModalOpen] = useState(false);
+
+  const openConversationModal = () => {
+    setIsConversationModalOpen(true);
+  };
+
   /**
    * Render the application
    */
@@ -899,7 +905,12 @@ export function ConsolePage() {
       <div className="content-main">
         <div className="content-logs">
           <div className="content-block conversation">
-            <div className="content-block-title">CONVERSATION</div>
+            <div className="content-block-title">
+              CONVERSATION
+              <button className="expand-conversation" onClick={openConversationModal}>
+                <Maximize2 size={16} />
+              </button>
+            </div>
             <div className="content-block-body" ref={conversationRef}>
               {!items.length && `awaiting connection...`}
               {items.map((conversationItem, i) => (
@@ -1118,6 +1129,58 @@ export function ConsolePage() {
               allowFullScreen={true}
             ></iframe>
             <button className="close-modal" onClick={() => setIsSheetModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
+      {isConversationModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsConversationModalOpen(false)}>
+          <div className="modal-content conversation-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="conversation-content">
+              {items.map((conversationItem, i) => (
+                <div className="conversation-item" key={conversationItem.id}>
+                  <span className={`speaker ${conversationItem.role || ''}`}>
+                    {(conversationItem.role || conversationItem.type).replaceAll('_', ' ')}:
+                  </span>
+                  <span className="speaker-content">
+                    {conversationItem.type === 'function_call_output' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(conversationItem.formatted.output || '')
+                      }} />
+                    )}
+                    {conversationItem.formatted.tool && (
+                      <span>
+                        {conversationItem.formatted.tool.name}(
+                        {JSON.stringify(conversationItem.formatted.tool.arguments)})
+                      </span>
+                    )}
+                    {conversationItem.role === 'user' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(
+                          conversationItem.formatted.transcript ||
+                          (conversationItem.formatted.audio?.length
+                            ? '(awaiting transcript)'
+                            : conversationItem.formatted.text ||
+                              '(item sent)')
+                        )
+                      }} />
+                    )}
+                    {conversationItem.role === 'assistant' && (
+                      <span dangerouslySetInnerHTML={{
+                        __html: formatText(
+                          conversationItem.formatted.transcript ||
+                          conversationItem.formatted.text ||
+                          '(truncated)'
+                        )
+                      }} />
+                    )}
+                  </span>
+                </div>
+              ))}
+              {isWaitingForResponse && (
+                <div className="waiting-for-response">Waiting for assistant response...</div>
+              )}
+            </div>
+            <button className="close-modal" onClick={() => setIsConversationModalOpen(false)}>Close</button>
           </div>
         </div>
       )}
