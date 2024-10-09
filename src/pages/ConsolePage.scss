@@ -663,10 +663,10 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       .iframe-container {
         width: 100%;
         height: 100%;
-        overflow: auto; // Change from overflow: hidden
+        overflow: hidden; // Change this from 'auto' to 'hidden'
 
         iframe {
-          width: 150%; // Increase width to force horizontal scroll
+          width: 100%; // Change this from 150% to 100%
           height: 100%;
           border: none;
         }

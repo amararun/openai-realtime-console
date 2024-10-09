@@ -643,7 +643,7 @@ export function ConsolePage() {
       {
         name: 'tool_multitask_api',
         description:
-          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Use this tool when the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -656,7 +656,7 @@ export function ConsolePage() {
         },
       },
       async ({ question }: { [key: string]: any }) => {
-        const url = "https://flowise2-4vzn.onrender.com/api/v1/prediction/1bca2aa1-cadf-4916-9ab4-d4d92d2590bc";
+        const url = "https://flowise.tigzig.com/api/v1/prediction/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5";
 
         const options = {
           method: 'POST',
@@ -1064,7 +1064,9 @@ export function ConsolePage() {
                 <iframe
                   ref={iframeRef}
                   key={iframeKey}
-                  src={sheetUrl}
+                  src={sheetType === 'google' 
+                    ? sheetUrl
+                    : excelSheetUrl}
                   width="100%"
                   height="100%"
                   frameBorder="0"
@@ -1097,6 +1099,7 @@ export function ConsolePage() {
               width="100%"
               height="100%"
               frameBorder="0"
+              allowFullScreen={true}
             ></iframe>
             <button className="close-modal" onClick={() => setIsSheetModalOpen(false)}>Close</button>
           </div>
