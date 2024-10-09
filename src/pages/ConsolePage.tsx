@@ -755,8 +755,7 @@ export function ConsolePage() {
 
   // Add this to your state declarations
   const [charts, setCharts] = useState<{ url: string; timestamp: number }[]>([]);
-
-  // Add these functions for chart navigation
+  // State variable for current chart index
   const [currentChartIndex, setCurrentChartIndex] = useState(0);
 
   const showPreviousChart = () => {
