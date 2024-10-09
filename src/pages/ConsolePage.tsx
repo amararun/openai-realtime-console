@@ -64,12 +64,22 @@ interface RealtimeEvent {
 
 const formatText = (text: string) => {
   if (!text) return '';
+  
+  // Check if the text looks like a table (contains multiple | characters)
+  if (text.split('|').length > 2) {
+    return `<pre>${text
+      .replace(/\|/g, '│')
+      .replace(/^/gm, '│ ')
+      .replace(/$/gm, ' │')
+      .replace(/\n/g, '\n│' + '─'.repeat(text.split('\n')[0].length) + '│\n')}</pre>`;
+  }
+  
   return text
-    .replace(/\\n/g, '\n')  // Replace \n with actual newlines
-    .replace(/\n\n/g, '<br/><br/>')  // Replace double newlines with double line breaks
-    .replace(/\n/g, '<br/>')  // Replace single newlines with line breaks
-    .replace(/\s-\s/g, '<br/>- ')  // Replace " - " with a line break and bullet point
-    .trim();  // Trim any leading or trailing whitespace
+    .replace(/\\n/g, '\n')
+    .replace(/\n\n/g, '<br/><br/>')
+    .replace(/\n/g, '<br/>')
+    .replace(/\s-\s/g, '<br/>- ')
+    .trim();
 };
 
 export function ConsolePage() {
