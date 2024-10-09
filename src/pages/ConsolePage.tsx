@@ -790,6 +790,14 @@ export function ConsolePage() {
     });
   };
 
+  // Add these state variables inside the ConsolePage component
+  const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
+
+  // Add this function inside the ConsolePage component
+  const openSheetModal = () => {
+    setIsSheetModalOpen(true);
+  };
+
   /**
    * Render the application
    */
@@ -984,18 +992,25 @@ export function ConsolePage() {
           <div className="content-block google-sheets">
             <div className="content-block-title">
               GOOGLE SHEETS
-              <button className="refresh-button" onClick={handleRefresh}>
-                <RefreshCw size={16} />
-              </button>
+              <div className="sheet-controls">
+                <button className="refresh-button" onClick={handleRefresh}>
+                  <RefreshCw size={16} />
+                </button>
+                <button className="expand-sheet" onClick={openSheetModal}>
+                  <Maximize2 size={16} />
+                </button>
+              </div>
             </div>
             <div className="content-block-body">
-              <iframe
-                key={iframeKey}
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQktRJ81_MoWeeiemwz724h6Zo8p8Lgx3rrBgAQUFf1m9FHaFLEtZVQR1Nth9TjoIKmVO5lVfwM1ma2/pubhtml?widget=true&rm=minimal"
-                width="100%"
-                height="420"
-                frameBorder="0"
-              ></iframe>
+              <div className="iframe-container">
+                <iframe
+                  key={iframeKey}
+                  src="https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>
@@ -1008,6 +1023,19 @@ export function ConsolePage() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <img src={modalChartUrl} alt="Expanded Chart" />
             <button className="close-modal" onClick={() => setIsModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
+      {isSheetModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsSheetModalOpen(false)}>
+          <div className="modal-content sheet-modal" onClick={(e) => e.stopPropagation()}>
+            <iframe
+              src="https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+            ></iframe>
+            <button className="close-modal" onClick={() => setIsSheetModalOpen(false)}>Close</button>
           </div>
         </div>
       )}
