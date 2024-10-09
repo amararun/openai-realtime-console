@@ -537,7 +537,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .content-block-body {
       .chart-scroll-container {
-        max-height: 100%;
+        max-height: 400px;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -547,22 +547,14 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           display: flex;
           flex-direction: column;
           align-items: center;
-          opacity: 0;
+          opacity: 1; // Change this from 0 to 1
           transition: opacity 0.3s ease-in-out;
-          position: absolute;
+          position: relative; // Change this from absolute to relative
           width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-
-          &.active {
-            opacity: 1;
-            position: relative;
-          }
 
           img {
             max-width: 100%;
-            max-height: 100%;
+            max-height: 300px;
             object-fit: contain;
           }
 

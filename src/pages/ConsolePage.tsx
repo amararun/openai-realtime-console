@@ -644,11 +644,8 @@ export function ConsolePage() {
                   imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
                 }
                 console.log('Setting image URL:', imageUrl);
-                setCharts(prevCharts => {
-                  const newCharts = [...prevCharts, { url: imageUrl, timestamp: Date.now() }];
-                  setCurrentChartIndex(newCharts.length - 1);
-                  return newCharts;
-                });
+                const newChart = { url: imageUrl, timestamp: Date.now() };
+                addChart(newChart);
                 return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
               }
             }
@@ -759,11 +756,28 @@ export function ConsolePage() {
   const [currentChartIndex, setCurrentChartIndex] = useState(0);
 
   const showPreviousChart = () => {
-    setCurrentChartIndex(prevIndex => Math.max(0, prevIndex - 1));
+    setCurrentChartIndex(prevIndex => {
+      const newIndex = Math.max(0, prevIndex - 1);
+      console.log('Previous chart:', newIndex);
+      return newIndex;
+    });
   };
 
   const showNextChart = () => {
-    setCurrentChartIndex(prevIndex => Math.min(charts.length - 1, prevIndex + 1));
+    setCurrentChartIndex(prevIndex => {
+      const newIndex = Math.min(charts.length - 1, prevIndex + 1);
+      console.log('Next chart:', newIndex);
+      return newIndex;
+    });
+  };
+
+  // Update the setCharts function to append new charts instead of replacing
+  const addChart = (newChart: { url: string; timestamp: number }) => {
+    setCharts(prevCharts => {
+      const newCharts = [...prevCharts, newChart];
+      setCurrentChartIndex(newCharts.length - 1);
+      return newCharts;
+    });
   };
 
   /**
@@ -927,25 +941,14 @@ export function ConsolePage() {
                 </div>
               </div>
               <div className="content-block-body">
-                {charts.length > 0 ? (
-                  <div className="chart-scroll-container">
-                    {charts.map((chart, index) => (
-                      <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`}>
-                        <img 
-                          src={chart.url} 
-                          alt={`Generated Chart ${index + 1}`} 
-                          style={{ maxWidth: '100%', height: 'auto' }}
-                          onError={(e) => console.error('Image load error:', e)}
-                        />
-                        <div className="chart-timestamp">
-                          {new Date(chart.timestamp).toLocaleTimeString()}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="chart-placeholder">No charts generated yet</div>
-                )}
+                <div className="chart-scroll-container">
+                  {charts.map((chart, index) => (
+                    <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`} style={{display: index === currentChartIndex ? 'flex' : 'none'}}>
+                      <img src={chart.url} alt={`Generated Chart ${index + 1}`} />
+                      <div className="chart-timestamp">{new Date(chart.timestamp).toLocaleTimeString()}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="content-block kv">
