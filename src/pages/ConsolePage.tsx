@@ -81,7 +81,12 @@ const sanitizeHtml = (html: string) => {
 };
 import { CapabilityCard } from '../components/CapabilityCard';
 
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
 export function ConsolePage() {
+  const location = useLocation();
+
   /**
    * Ask user for API Key
    * If we're using the local relay server, we don't need this

@@ -15,6 +15,10 @@ $header-text-color: #1a237e; // Dark navy blue
 // Add this new variable for the shadow
 $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+// Add these variables at the top of the file
+$nav-background: #1a237e; // Dark blue for navigation
+$nav-text-color: #ffffff; // White text for navigation
+
 @use "sass:color";
 
 [data-component='ConsolePage'] {
@@ -30,7 +34,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   .header-section {
     display: flex;
     flex-direction: column;
-    padding: 12px;
+    padding: 8px 12px; // Reduced padding
     border-bottom: 1px solid #e1e4e8;
   }
 
@@ -38,7 +42,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 12px;
-    margin-bottom: 16px; // Reduced margin between cards and main header
+    margin-bottom: 12px; // Reduced margin
   }
 
   .main-header {
@@ -1093,6 +1097,40 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   @keyframes move-stripes {
     0% { background-position: 0 0; }
     100% { background-position: 50px 0; }
+  }
+
+  // Add this new style for the navigation
+  .top-navigation {
+    background-color: $nav-background;
+    padding: 8px 16px;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+
+      li {
+        margin: 0 10px;
+
+        a {
+          text-decoration: none;
+          color: $nav-text-color;
+          font-weight: bold;
+          font-size: 16px;
+          transition: opacity 0.3s;
+
+          &:hover {
+            opacity: 0.8;
+          }
+
+          &.active {
+            border-bottom: 2px solid $nav-text-color;
+          }
+        }
+      }
+    }
   }
 }
 
