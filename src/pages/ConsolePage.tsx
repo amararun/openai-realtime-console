@@ -62,24 +62,22 @@ interface RealtimeEvent {
   event: { [key: string]: any };
 }
 
-const formatText = (text: string) => {
-  if (!text) return '';
-  
-  // Check if the text looks like a table (contains multiple | characters)
-  if (text.split('|').length > 2) {
-    return `<pre>${text
-      .replace(/\|/g, '│')
-      .replace(/^/gm, '│ ')
-      .replace(/$/gm, ' │')
-      .replace(/\n/g, '\n│' + '─'.repeat(text.split('\n')[0].length) + '│\n')}</pre>`;
-  }
-  
-  return text
-    .replace(/\\n/g, '\n')
-    .replace(/\n\n/g, '<br/><br/>')
-    .replace(/\n/g, '<br/>')
-    .replace(/\s-\s/g, '<br/>- ')
-    .trim();
+// Update these imports
+import ReactMarkdown from 'react-markdown';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
+
+// Register the TypeScript language
+SyntaxHighlighter.registerLanguage('typescript', typescript);
+
+// Add this function to replace formatText
+const sanitizeHtml = (html: string) => {
+  return html.replace(/&/g, '&amp;')
+             .replace(/</g, '&lt;')
+             .replace(/>/g, '&gt;')
+             .replace(/"/g, '&quot;')
+             .replace(/'/g, '&#039;');
 };
 
 export function ConsolePage() {
@@ -931,7 +929,7 @@ export function ConsolePage() {
                   <span className="speaker-content">
                     {conversationItem.type === 'function_call_output' && (
                       <span dangerouslySetInnerHTML={{
-                        __html: formatText(conversationItem.formatted.output || '')
+                        __html: sanitizeHtml(conversationItem.formatted.output || '')
                       }} />
                     )}
                     {conversationItem.formatted.tool && (
@@ -941,24 +939,40 @@ export function ConsolePage() {
                       </span>
                     )}
                     {conversationItem.role === 'user' && (
-                      <span dangerouslySetInnerHTML={{
-                        __html: formatText(
-                          conversationItem.formatted.transcript ||
-                          (conversationItem.formatted.audio?.length
-                            ? '(awaiting transcript)'
-                            : conversationItem.formatted.text ||
-                              '(item sent)')
-                        )
-                      }} />
+                      <span>
+                        {conversationItem.formatted.transcript ||
+                        (conversationItem.formatted.audio?.length
+                          ? '(awaiting transcript)'
+                          : conversationItem.formatted.text ||
+                            '(item sent)')}
+                      </span>
                     )}
                     {conversationItem.role === 'assistant' && (
-                      <span dangerouslySetInnerHTML={{
-                        __html: formatText(
-                          conversationItem.formatted.transcript ||
-                          conversationItem.formatted.text ||
-                          '(truncated)'
-                        )
-                      }} />
+                      <ReactMarkdown
+                        components={{
+                          code: ({ node, inline, className, children, ...props }: any) => {
+                            const match = /language-(\w+)/.exec(className || '')
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                style={oneDark as any}
+                                language={match[1]}
+                                PreTag="div"
+                                {...props}
+                              >
+                                {String(children).replace(/\n$/, '')}
+                              </SyntaxHighlighter>
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            )
+                          }
+                        }}
+                      >
+                        {conversationItem.formatted.transcript ||
+                         conversationItem.formatted.text ||
+                         '(truncated)'}
+                      </ReactMarkdown>
                     )}
                   </span>
                 </div>
@@ -1154,7 +1168,7 @@ export function ConsolePage() {
                   <span className="speaker-content">
                     {conversationItem.type === 'function_call_output' && (
                       <span dangerouslySetInnerHTML={{
-                        __html: formatText(conversationItem.formatted.output || '')
+                        __html: sanitizeHtml(conversationItem.formatted.output || '')
                       }} />
                     )}
                     {conversationItem.formatted.tool && (
@@ -1164,24 +1178,40 @@ export function ConsolePage() {
                       </span>
                     )}
                     {conversationItem.role === 'user' && (
-                      <span dangerouslySetInnerHTML={{
-                        __html: formatText(
-                          conversationItem.formatted.transcript ||
-                          (conversationItem.formatted.audio?.length
-                            ? '(awaiting transcript)'
-                            : conversationItem.formatted.text ||
-                              '(item sent)')
-                        )
-                      }} />
+                      <span>
+                        {conversationItem.formatted.transcript ||
+                        (conversationItem.formatted.audio?.length
+                          ? '(awaiting transcript)'
+                          : conversationItem.formatted.text ||
+                            '(item sent)')}
+                      </span>
                     )}
                     {conversationItem.role === 'assistant' && (
-                      <span dangerouslySetInnerHTML={{
-                        __html: formatText(
-                          conversationItem.formatted.transcript ||
-                          conversationItem.formatted.text ||
-                          '(truncated)'
-                        )
-                      }} />
+                      <ReactMarkdown
+                        components={{
+                          code: ({ node, inline, className, children, ...props }: any) => {
+                            const match = /language-(\w+)/.exec(className || '')
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                style={oneDark as any}
+                                language={match[1]}
+                                PreTag="div"
+                                {...props}
+                              >
+                                {String(children).replace(/\n$/, '')}
+                              </SyntaxHighlighter>
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            )
+                          }
+                        }}
+                      >
+                        {conversationItem.formatted.transcript ||
+                         conversationItem.formatted.text ||
+                         '(truncated)'}
+                      </ReactMarkdown>
                     )}
                   </span>
                 </div>
