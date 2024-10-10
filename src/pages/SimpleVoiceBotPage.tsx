@@ -132,6 +132,7 @@ export function SimpleVoiceBotPage() {
 
     try {
       // Transcribe audio
+      const transcriptionStartTime = Date.now();
       const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
         method: 'POST',
         headers: {
@@ -146,11 +147,17 @@ export function SimpleVoiceBotPage() {
 
       const transcriptionData = await transcriptionResponse.json();
       const transcription = transcriptionData.text;
+      const transcriptionTime = Date.now() - transcriptionStartTime;
 
       // Add user message to conversation
-      setConversation(prev => [...prev, { role: 'user', content: transcription }]);
+      setConversation(prev => [...prev, { 
+        role: 'user', 
+        content: transcription,
+        transcriptionTime: transcriptionTime
+      }]);
 
       // Generate chat response
+      const chatStartTime = Date.now();
       const chatResponse = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -169,8 +176,10 @@ export function SimpleVoiceBotPage() {
 
       const chatData = await chatResponse.json();
       const assistantMessage = chatData.choices[0].message.content;
+      const chatTime = Date.now() - chatStartTime;
 
       // Generate speech from assistant's response
+      const audioStartTime = Date.now();
       const speechResponse = await fetch('https://api.openai.com/v1/audio/speech', {
         method: 'POST',
         headers: {
@@ -190,12 +199,15 @@ export function SimpleVoiceBotPage() {
 
       const audioBlob = await speechResponse.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
+      const audioTime = Date.now() - audioStartTime;
 
       // Add assistant message to conversation
       setConversation(prev => [...prev, { 
         role: 'assistant', 
         content: assistantMessage,
         audioUrl: audioUrl,
+        chatTime: chatTime,
+        audioTime: audioTime
       }]);
 
       setIsProcessing(false);
@@ -237,8 +249,8 @@ export function SimpleVoiceBotPage() {
   ];
 
   return (
-    <div data-component="SimpleVoiceBotPage">
-      <div className="header-section">
+    <div data-component="SimpleVoiceBotPage" className="flex flex-col h-screen">
+      <div className="header-section flex-shrink-0">
         <div className="capabilities-section">
           {capabilities.map((capability, index) => (
             <CapabilityCard key={index} title={capability.title} />
@@ -251,10 +263,10 @@ export function SimpleVoiceBotPage() {
           </div>
         </div>
       </div>
-      <div className="content-main">
-        <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
+      <div className="content-main flex-grow overflow-hidden">
+        <div className="flex h-full">
           {/* Voice Bot Controls */}
-          <div className="w-full md:w-1/3">
+          <div className="w-1/3 p-4 flex flex-col">
             <Input
               type="password"
               placeholder="Enter your OpenAI API key"
@@ -292,12 +304,11 @@ export function SimpleVoiceBotPage() {
                 Processing your request...
               </div>
             )}
-            {isListening && <ListeningPopup onStop={stopListening} />}
           </div>
 
           {/* Conversation Box */}
-          <div className="w-full md:w-2/3">
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-xl border border-white border-opacity-20 p-4 h-[600px] overflow-y-auto">
+          <div className="w-2/3 p-4 overflow-hidden flex flex-col">
+            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-xl border border-white border-opacity-20 p-4 flex-grow overflow-y-auto">
               <h3 className="text-xl font-semibold mb-4 text-white">Conversation</h3>
               <div className="space-y-6">
                 {conversation.map((message, index) => (
@@ -308,7 +319,9 @@ export function SimpleVoiceBotPage() {
                       </div>
                       <div className="ml-3 flex-1">
                         <p className="text-sm font-medium">{message.role === 'user' ? 'You' : 'Assistant'}</p>
-                        <p className="mt-1 text-sm">{message.content}</p>
+                        <ReactMarkdown className="mt-1 text-sm prose prose-invert max-w-none">
+                          {message.content}
+                        </ReactMarkdown>
                         {message.role === 'user' && message.transcriptionTime && (
                           <p className="text-xs text-gray-400 mt-1">
                             <Clock className="inline mr-1 h-3 w-3" />
@@ -347,6 +360,7 @@ export function SimpleVoiceBotPage() {
           </div>
         </div>
       </div>
+      {isListening && <ListeningPopup onStop={stopListening} />}
     </div>
   );
 }
