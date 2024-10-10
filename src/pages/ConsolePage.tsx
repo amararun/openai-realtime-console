@@ -1094,16 +1094,6 @@ export function ConsolePage() {
                 </div>
               </div>
             </div>
-            <div className="content-block kv">
-              <div className="content-block-title">QUICK NOTES</div>
-              <div className="content-block-body content-kv">
-                {Object.entries(memoryKv).map(([key, value], index) => (
-                  <div key={index}>
-                    <li>{`${key}: ${value}`}</li>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
           <div className="content-block google-sheets">
             <div className="content-block-title">

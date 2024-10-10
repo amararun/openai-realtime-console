@@ -386,8 +386,7 @@ $nav-text-color: #ffffff; // White text for navigation
         gap: 12px;
         height: 300px; // Adjust this value to change the height of the top row
 
-        .chart-display,
-        .kv {
+        .chart-display {
           flex: 1;
           height: 100%;
           display: flex;
@@ -397,6 +396,9 @@ $nav-text-color: #ffffff; // White text for navigation
 
       .chart-display {
         .content-block-body {
+          flex: 1;
+          overflow: hidden;
+
           .chart-scroll-container {
             height: 100%;
             overflow-y: auto;
@@ -413,7 +415,7 @@ $nav-text-color: #ffffff; // White text for navigation
 
               img {
                 max-width: 100%;
-                max-height: 200px; // Adjust this value to change the maximum height of the chart
+                max-height: 250px; // Increase this value to make the chart larger
                 object-fit: contain;
               }
 
@@ -424,12 +426,6 @@ $nav-text-color: #ffffff; // White text for navigation
               }
             }
           }
-        }
-      }
-
-      .kv {
-        .content-block-body {
-          overflow-y: auto;
         }
       }
 
@@ -749,8 +745,7 @@ $nav-text-color: #ffffff; // White text for navigation
       gap: 12px;
       height: 300px; // Adjust this value to change the height of the top row
 
-      .chart-display,
-      .kv {
+      .chart-display {
         flex: 1;
         height: 100%;
         display: flex;
@@ -760,6 +755,9 @@ $nav-text-color: #ffffff; // White text for navigation
 
     .chart-display {
       .content-block-body {
+        flex: 1;
+        overflow: hidden;
+
         .chart-scroll-container {
           height: 100%;
           overflow-y: auto;
@@ -776,7 +774,7 @@ $nav-text-color: #ffffff; // White text for navigation
 
             img {
               max-width: 100%;
-              max-height: 200px; // Adjust this value to change the maximum height of the chart
+              max-height: 250px; // Increase this value to make the chart larger
               object-fit: contain;
             }
 
@@ -787,12 +785,6 @@ $nav-text-color: #ffffff; // White text for navigation
             }
           }
         }
-      }
-    }
-
-    .kv {
-      .content-block-body {
-        overflow-y: auto;
       }
     }
 
