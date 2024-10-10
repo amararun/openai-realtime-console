@@ -11,10 +11,10 @@ function App() {
         <nav>
           <ul>
             <li>
-              <Link to="/">Console Page</Link>
+              <Link to="/">REALTIME</Link>
             </li>
             <li>
-              <Link to="/simple-voice-bot">Simple Voice Bot</Link>
+              <Link to="/simple-voice-bot">VOICE</Link>
             </li>
           </ul>
         </nav>

@@ -8,7 +8,7 @@ interface CapabilityCardProps {
 export function CapabilityCard({ title }: CapabilityCardProps) {
   return (
     <div className="CapabilityCard">
-      {title}
+      <span className="CapabilityCard-title">{title}</span>
     </div>
   );
 }
