@@ -1070,7 +1070,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 32px;
     height: 32px;
     border: 3px solid #1a237e; // Dark navy blue to match the background
-    border-top: 3px solid #ffffff; // White spinning element
+    border-top: 3px solid transparent; /* Make the top arc transparent */
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }

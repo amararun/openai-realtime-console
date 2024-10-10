@@ -900,7 +900,7 @@ export function ConsolePage() {
             <div className="spinner-container">
               {isConnected && (
                 <div className="spinner">
-                  <RingLoader color="#ffffff" size={30} />
+                  <RingLoader color="#ffffff" size={25} />
                 </div>
               )}
             </div>
