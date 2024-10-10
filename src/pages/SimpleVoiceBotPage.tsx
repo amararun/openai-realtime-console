@@ -25,9 +25,13 @@ export function SimpleVoiceBotPage() {
         <div className="main-header">
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-            <span>Realtime Analytics Assistant</span>
+            <span>Simple Voice Bot</span>
           </div>
         </div>
+      </div>
+      <div className="content-main">
+        <h2>This is the Simple Voice Bot Page</h2>
+        {/* Add more content specific to the Simple Voice Bot page here */}
       </div>
     </div>
   );

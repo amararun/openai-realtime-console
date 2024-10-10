@@ -41,8 +41,9 @@ $nav-text-color: #ffffff; // White text for navigation
   .capabilities-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 12px;
-    margin-bottom: 12px; // Reduced margin
+    gap: 8px; // Reduced gap
+    margin-bottom: 8px; // Reduced margin
+    padding: 0 4px; // Added small horizontal padding
   }
 
   .main-header {

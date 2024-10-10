@@ -28,7 +28,7 @@
 .CapabilityCard {
   background: linear-gradient(135deg, #1e3a8a, #2563eb);
   color: white;
-  padding: 8px 6px;
+  padding: 6px 4px; // Reduced padding
   border-radius: 6px;
   text-align: center;
   font-weight: 600;
@@ -38,6 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0; // Remove any margin
 
   &:hover {
     transform: translateY(-2px);
@@ -45,7 +46,7 @@
   }
 
   &-title {
-    font-size: 17px;
+    font-size: 18px; // Increased font size
     line-height: 1.1;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   }

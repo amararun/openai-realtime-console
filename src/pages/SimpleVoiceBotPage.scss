@@ -35,10 +35,26 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .capabilities-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .capability-card {
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #e0e0e0;
+      }
+    }
   }
 
   .main-header {
