@@ -1,6 +1,6 @@
 import React from 'react';
 import { CapabilityCard } from '../components/CapabilityCard';
-import './SimpleVoiceBotPage.scss';
+import './ConsolePage.scss'; // Using ConsolePage.scss for styles
 
 export function SimpleVoiceBotPage() {
   const capabilities = [
