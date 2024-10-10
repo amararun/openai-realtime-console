@@ -1,5 +1,5 @@
 .capability-card {
-  background-color: #3498db; // Changed to a vibrant blue color
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 8px;
@@ -13,13 +13,14 @@
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    background-color: #2980b9; // Darker blue on hover
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
   }
 
   .capability-card-title {
     font-size: 14px;
     font-weight: 600;
-    color: #ffffff; // White text for better contrast
+    color: #ffffff;
     line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 }
