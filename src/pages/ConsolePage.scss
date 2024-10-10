@@ -1163,15 +1163,28 @@ $nav-text-color: #ffffff; // White text for navigation
 // Add these styles at the end of the ConsolePage.scss file
 
 [data-component="SimpleVoiceBotPage"] {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $background-color;
+  color: $text-color;
+
   .header-section {
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e1e4e8;
   }
 
   .capabilities-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 0 4px;
   }
 
   .capability-card {
@@ -1183,6 +1196,7 @@ $nav-text-color: #ffffff; // White text for navigation
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-align: center;
 
     &:hover {
       background-color: #3a7bc8;
@@ -1190,28 +1204,40 @@ $nav-text-color: #ffffff; // White text for navigation
   }
 
   .main-header {
-    .content-title {
-      display: flex;
-      align-items: center;
-      
-      .fxis-logo {
-        height: 40px;
-        margin-right: 15px;
-      }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding-top: 12px;
+  }
 
-      span {
-        font-size: 24px;
-        font-weight: 600;
-        color: #333;
-      }
+  .content-title {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    
+    .fxis-logo {
+      height: 64px;
+      margin-right: 16px;
+    }
+
+    span {
+      font-size: 32px;
+      white-space: nowrap;
+      font-weight: 600;
+      color: #2c3e50;
     }
   }
 
   .content-main {
+    flex-grow: 1;
     padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 20px;
 
     h2 {
-      font-size: 20px;
+      font-size: 24px;
       color: #333;
       margin-bottom: 20px;
     }
