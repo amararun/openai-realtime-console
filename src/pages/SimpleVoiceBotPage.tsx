@@ -201,14 +201,23 @@ export function SimpleVoiceBotPage() {
       const audioUrl = URL.createObjectURL(audioBlob);
       const audioTime = Date.now() - audioStartTime;
 
-      // Add assistant message to conversation
-      setConversation(prev => [...prev, { 
-        role: 'assistant', 
-        content: assistantMessage,
-        audioUrl: audioUrl,
-        chatTime: chatTime,
-        audioTime: audioTime
-      }]);
+      // Modify the assistant message addition to include auto-play
+      setConversation(prev => {
+        const newMessage: Message = { 
+          role: 'assistant', 
+          content: assistantMessage,
+          audioUrl: audioUrl,
+          chatTime: chatTime,
+          audioTime: audioTime
+        };
+        
+        const newConversation = [...prev, newMessage];
+        
+        // Schedule the audio playback after the state update
+        setTimeout(() => playAudio(audioUrl), 0);
+        
+        return newConversation;
+      });
 
       setIsProcessing(false);
     } catch (error) {
@@ -217,11 +226,30 @@ export function SimpleVoiceBotPage() {
     }
   };
 
-  const playAudio = (audioUrl: string) => {
-    audioRef.current.src = audioUrl;
-    audioRef.current.play();
-    setIsPlaying(true);
-  };
+  const playAudio = useCallback((audioUrl: string) => {
+    const audio = audioRef.current;
+    
+    // Stop any currently playing audio
+    audio.pause();
+    audio.currentTime = 0;
+
+    // Set the new audio source
+    audio.src = audioUrl;
+
+    // Play the new audio
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+          setIsPlaying(false);
+        });
+    }
+  }, []);
 
   const stopAudio = () => {
     audioRef.current.pause();
@@ -249,24 +277,24 @@ export function SimpleVoiceBotPage() {
   ];
 
   return (
-    <div data-component="SimpleVoiceBotPage" className="flex flex-col h-screen">
-      <div className="header-section flex-shrink-0">
-        <div className="capabilities-section">
+    <div data-component="SimpleVoiceBotPage" className="flex flex-col h-screen bg-gray-900 text-white">
+      <div className="header-section flex-shrink-0 bg-gray-800 p-4">
+        <div className="capabilities-section flex flex-wrap justify-center gap-2 mb-4">
           {capabilities.map((capability, index) => (
             <CapabilityCard key={index} title={capability.title} />
           ))}
         </div>
-        <div className="main-header">
-          <div className="content-title">
-            <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-            <span>Voice Analytics Assistant</span>
+        <div className="main-header flex items-center justify-center">
+          <div className="content-title flex items-center space-x-4">
+            <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo h-10" />
+            <span className="text-2xl font-bold">Voice Analytics Assistant</span>
           </div>
         </div>
       </div>
-      <div className="content-main flex-grow overflow-hidden">
-        <div className="flex h-full">
+      <div className="content-main flex-grow overflow-hidden p-4">
+        <div className="flex h-full space-x-4">
           {/* Voice Bot Controls */}
-          <div className="w-1/3 p-4 flex flex-col">
+          <div className="w-1/3 flex flex-col space-y-4 bg-gray-800 rounded-lg p-4">
             <Input
               type="password"
               placeholder="Enter your OpenAI API key"
@@ -275,31 +303,25 @@ export function SimpleVoiceBotPage() {
                 setApiKey(e.target.value);
                 localStorage.setItem('tmp::voice_api_key', e.target.value);
               }}
-              className="mb-6 bg-gray-800 text-white placeholder-gray-500 border-gray-700"
+              className="bg-gray-700 text-white placeholder-gray-500 border-gray-600"
             />
-            <button onClick={resetAPIKey} className="mb-4 text-blue-400 hover:text-blue-300">
+            <button 
+              onClick={resetAPIKey} 
+              className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+            >
               Reset API Key
             </button>
-            <div className="flex justify-center mb-8 space-x-4">
+            <div className="flex justify-center items-center flex-grow">
               <IconButton
                 onClick={startListening}
                 disabled={!apiKey || isProcessing || isListening}
                 icon={Mic}
-                size="h-48 w-48"
+                size="h-32 w-32"
                 className="bg-blue-500 hover:bg-blue-600 shadow-lg"
               />
-              {isPlaying && (
-                <IconButton
-                  onClick={stopAudio}
-                  disabled={false}
-                  icon={VolumeX}
-                  size="h-16 w-16"
-                  className="bg-red-500 hover:bg-red-600"
-                />
-              )}
             </div>
             {isProcessing && (
-              <div className="text-center text-gray-300 mb-6 flex items-center justify-center">
+              <div className="text-center text-gray-300 flex items-center justify-center">
                 <Loader className="animate-spin mr-2 h-5 w-5" />
                 Processing your request...
               </div>
@@ -307,55 +329,40 @@ export function SimpleVoiceBotPage() {
           </div>
 
           {/* Conversation Box */}
-          <div className="w-2/3 p-4 overflow-hidden flex flex-col">
-            <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-lg shadow-xl border border-white border-opacity-20 p-4 flex-grow overflow-y-auto">
-              <h3 className="text-xl font-semibold mb-4 text-white">Conversation</h3>
-              <div className="space-y-6">
-                {conversation.map((message, index) => (
-                  <div key={index} className={`p-4 rounded-lg ${message.role === 'user' ? 'bg-blue-500 bg-opacity-20' : 'bg-purple-500 bg-opacity-20'} backdrop-filter backdrop-blur-sm transition-all duration-300 hover:shadow-lg`}>
-                    <div className="flex items-start">
-                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${message.role === 'user' ? 'bg-blue-600' : 'bg-purple-600'}`}>
-                        {message.role === 'user' ? <Mic className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
-                      </div>
-                      <div className="ml-3 flex-1">
-                        <p className="text-sm font-medium">{message.role === 'user' ? 'You' : 'Assistant'}</p>
-                        <ReactMarkdown className="mt-1 text-sm prose prose-invert max-w-none">
-                          {message.content}
-                        </ReactMarkdown>
-                        {message.role === 'user' && message.transcriptionTime && (
-                          <p className="text-xs text-gray-400 mt-1">
-                            <Clock className="inline mr-1 h-3 w-3" />
-                            Transcription: {formatTime(message.transcriptionTime)}
-                          </p>
-                        )}
-                        {message.role === 'assistant' && (
-                          <div className="mt-2">
-                            {message.chatTime && (
-                              <p className="text-xs text-gray-400">
-                                <Clock className="inline mr-1 h-3 w-3" />
-                                Chat: {formatTime(message.chatTime)}
-                              </p>
-                            )}
-                            {message.audioUrl && (
-                              <div className="mt-1">
-                                <button onClick={() => playAudio(message.audioUrl ?? '')} className="text-blue-300 hover:text-blue-100 transition-colors duration-200">
-                                  <Volume2 className="inline mr-1 h-4 w-4" /> Play Audio
-                                </button>
-                                {message.audioTime && (
-                                  <span className="ml-2 text-xs text-gray-400">
-                                    <Clock className="inline mr-1 h-3 w-3" />
-                                    Audio: {formatTime(message.audioTime)}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="w-2/3 flex flex-col bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+            <div className="p-4 border-b border-gray-700">
+              <h3 className="text-xl font-semibold text-white">Conversation Box</h3>
+            </div>
+            <div className="flex-grow overflow-y-auto p-4">
+              {conversation.map((message, index) => (
+                <div key={index} className="mb-2">
+                  <span className={`font-bold ${message.role === 'user' ? 'text-blue-400' : 'text-purple-400'}`}>
+                    {message.role === 'user' ? 'User: ' : 'Assistant: '}
+                  </span>
+                  <span>{message.content}</span>
+                  {message.role === 'assistant' && isPlaying && message === conversation[conversation.length - 1] && (
+                    <span className="ml-2 text-green-400">
+                      <Volume2 className="inline-block w-4 h-4 mr-1" />
+                      Playing
+                    </span>
+                  )}
+                  {message.transcriptionTime && (
+                    <span className="text-xs text-gray-400 ml-2">
+                      (Transcription: {formatTime(message.transcriptionTime)})
+                    </span>
+                  )}
+                  {message.chatTime && (
+                    <span className="text-xs text-gray-400 ml-2">
+                      (Chat: {formatTime(message.chatTime)})
+                    </span>
+                  )}
+                  {message.audioTime && (
+                    <span className="text-xs text-gray-400 ml-2">
+                      (Audio: {formatTime(message.audioTime)})
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
