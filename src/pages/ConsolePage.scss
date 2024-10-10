@@ -379,12 +379,12 @@ $nav-text-color: #ffffff; // White text for navigation
       max-width: 50%; // Add this line to prevent shrinking
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 4px; // Reduce this value from 12px to 4px
 
       .content-top-row {
         display: flex;
-        gap: 12px;
-        height: 300px; // Adjust this value to change the height of the top row
+        gap: 4px; // Reduce this value from 12px to 4px
+        height: 300px; // You might want to adjust this value as well
 
         .chart-display {
           flex: 1;

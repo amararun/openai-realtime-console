@@ -82,11 +82,8 @@ const sanitizeHtml = (html: string) => {
 import { CapabilityCard } from '../components/CapabilityCard';
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
 
 export function ConsolePage() {
-  const location = useLocation();
-
   /**
    * Ask user for API Key
    * If we're using the local relay server, we don't need this
@@ -187,7 +184,7 @@ export function ConsolePage() {
   };
 
   // Add these new state variables
-  const [sheetType, setSheetType] = useState<'google' | 'excel' | 'docs'>('google');
+  const [sheetType, setSheetType] = useState<'google' | 'excel' | 'docs'>('excel');
   const [excelSheetUrl] = useState('https://harolikar-my.sharepoint.com/personal/amar_harolikar_com/_layouts/15/Doc.aspx?sourcedoc={371a2aba-3da4-4966-8d5a-e02eb2038845}&action=embedview&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True');
 
   // Add this new constant for the Google Docs URL
@@ -233,7 +230,7 @@ export function ConsolePage() {
   };
 
   // Add this state variable at the top of your component
-  const [sheetUrl, setSheetUrl] = useState(`https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false`);
+  const [sheetUrl, setSheetUrl] = useState(excelSheetUrl);
 
   const [isSheetLoading, setIsSheetLoading] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
