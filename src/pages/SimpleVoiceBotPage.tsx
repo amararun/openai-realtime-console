@@ -1,0 +1,34 @@
+import React from 'react';
+import { CapabilityCard } from '../components/CapabilityCard';
+import './SimpleVoiceBotPage.scss';
+
+export function SimpleVoiceBotPage() {
+  const capabilities = [
+    { title: "MySQL DW" },
+    { title: "Text-to-SQL" },
+    { title: "Analyze Data" },
+    { title: "Python Charts" },
+    { title: "Yahoo Finance" },
+    { title: "Update Trackers" },
+    { title: "Slide Deck" },
+    { title: "Email Reports" },
+  ];
+
+  return (
+    <div data-component="SimpleVoiceBotPage">
+      <div className="header-section">
+        <div className="capabilities-section">
+          {capabilities.map((capability, index) => (
+            <CapabilityCard key={index} title={capability.title} />
+          ))}
+        </div>
+        <div className="main-header">
+          <div className="content-title">
+            <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
+            <span>Realtime Analytics Assistant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

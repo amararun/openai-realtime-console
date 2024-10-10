@@ -5,10 +5,10 @@ interface CapabilityCardProps {
   title: string;
 }
 
-export const CapabilityCard: React.FC<CapabilityCardProps> = ({ title }) => {
+export function CapabilityCard({ title }: CapabilityCardProps) {
   return (
-    <div className="capability-card">
-      <div className="capability-card-title">{title}</div>
+    <div className="CapabilityCard">
+      {title}
     </div>
   );
-};
+}

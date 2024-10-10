@@ -3,3 +3,32 @@
   width: 100%;
   position: relative;
 }
+
+.App {
+  nav {
+    background-color: #f0f0f0;
+    padding: 10px;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+
+      li {
+        margin: 0 10px;
+
+        a {
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+
+          &:hover {
+            color: #0066cc;
+          }
+        }
+      }
+    }
+  }
+}
