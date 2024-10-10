@@ -662,7 +662,7 @@ export function ConsolePage() {
       {
         name: 'tool_multitask_api',
         description:
-        'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, querying a database (AWS/Azure), or generating a chart or doing statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Use this tool when the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+        'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also query AWS and Azure data warehouses. So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Further more, use this  the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -709,9 +709,11 @@ export function ConsolePage() {
               if (imageArtifact) {
                 console.log('Image artifact found:', imageArtifact);
                 let imageUrl: string;
-                if (imageArtifact.data.startsWith('FILE-STORAGE::')) {
+                if (typeof imageArtifact.data === 'string' && imageArtifact.data.startsWith('https://flowise.tigzig.com/api/v1/get-upload-file')) {
+                  imageUrl = imageArtifact.data;
+                } else if (imageArtifact.data.startsWith('FILE-STORAGE::')) {
                   const fileName = imageArtifact.data.replace('FILE-STORAGE::', '');
-                  imageUrl = `https://flowise2-4vzn.onrender.com/api/v1/get-upload-file?chatflowId=1bca2aa1-cadf-4916-9ab4-d4d92d2590bc&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
+                  imageUrl = `https://flowise.tigzig.com/api/v1/get-upload-file?chatflowId=36ed6454-2b9d-4ed1-91aa-72d15caa8ee5&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
                 } else {
                   imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
                 }
@@ -731,8 +733,9 @@ export function ConsolePage() {
             const blob = await response.blob();
             const imageUrl = URL.createObjectURL(blob);
             console.log('Image blob URL:', imageUrl);
-            setImageUrl(imageUrl);
-            return "Image blob received. It will be displayed in the chart area.";
+            const newChart = { url: imageUrl, timestamp: Date.now() };
+            addChart(newChart);
+            return "Image received. It will be displayed in the chart area.";
           } else {
             console.log('Unknown response type:', contentType);
             return 'Unknown response type';
@@ -894,6 +897,13 @@ export function ConsolePage() {
             <span>Realtime Analytics Assistant</span>
           </div>
           <div className="content-controls">
+            <div className="spinner-container">
+              {isConnected && (
+                <div className="spinner">
+                  <RingLoader color="#ffffff" size={30} />
+                </div>
+              )}
+            </div>
             <Toggle
               defaultValue={true}
               labels={['MANUAL', 'VAD']}

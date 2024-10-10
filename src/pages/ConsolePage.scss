@@ -38,7 +38,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 12px;
-    margin-bottom: 24px; // Increased margin between cards and main header
+    margin-bottom: 16px; // Reduced margin between cards and main header
   }
 
   .main-header {
@@ -55,23 +55,148 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     
     .fxis-logo {
-      height: 56px; // Increased logo size
+      height: 64px; // Increased logo size
       margin-right: 16px;
     }
 
     span {
-      font-size: 28px; // Increased font size
+      font-size: 32px; // Increased font size
       white-space: nowrap;
       font-weight: 600;
-      color: #2c3e50; // Darker color for better contrast
+      color: #2c3e50;
     }
   }
 
   .content-controls {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 16px; // Increased gap to create more space between elements
     flex-shrink: 0;
+
+    .spinner-container {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      position: relative;
+      background-color: #1a237e; // Dark navy blue background
+      border-radius: 50%; // Make the container circular
+      overflow: hidden; // Ensure the spinning elements don't overflow
+    }
+
+    .spinner {
+      width: 30px; // Slightly smaller than the container
+      height: 30px;
+      position: relative;
+
+      .orbit {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid transparent;
+        border-radius: 50%;
+
+        &:nth-child(1) {
+          border-top: 2px solid #ffffff; // White color
+          animation: spinner-orbit 1.5s linear infinite;
+        }
+
+        &:nth-child(2) {
+          border-right: 2px solid #ffffff; // White color
+          animation: spinner-orbit 2s linear infinite;
+        }
+      }
+    }
+
+    .Toggle {
+      background-color: #1e3a8a; // Darker shade of blue
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+
+      button {
+        background: none;
+        border: none;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+
+        &[aria-pressed="true"] {
+          background-color: #3b82f6; // Lighter shade of blue
+        }
+      }
+    }
+
+    .Button {
+      &.action {
+        background-color: #10b981; // Green color for connect button
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #059669; // Darker green on hover
+        }
+      }
+
+      &.regular {
+        background-color: #ef4444; // Red color for disconnect button
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #dc2626; // Darker red on hover
+        }
+      }
+    }
+
+    .connect-button {
+      background-color: #4299e1;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #3182ce;
+      }
+    }
+
+    .connection-status {
+      background-color: #e53e3e;
+      color: white;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.connected {
+        background-color: #48bb78;
+      }
+    }
 
     button, 
     .api-key-button,
@@ -484,24 +609,23 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .content-block-body {
       .chart-scroll-container {
-        max-height: 400px;
+        height: 100%;
         overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
 
         .chart-item {
           display: flex;
           flex-direction: column;
           align-items: center;
-          opacity: 1; // Change this from 0 to 1
-          transition: opacity 0.3s ease-in-out;
-          position: relative; // Change this from absolute to relative
-          width: 100%;
+          margin-bottom: 16px;
+          position: relative;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
 
           img {
             max-width: 100%;
-            max-height: 300px;
+            max-height: 200px;
             object-fit: contain;
           }
 
@@ -509,6 +633,22 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-top: 8px;
             font-size: 12px;
             color: $light-text-color;
+          }
+
+          .expand-chart {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.9);
+            }
           }
         }
       }
@@ -925,6 +1065,35 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     }
   }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #1a237e; // Dark navy blue to match the background
+    border-top: 3px solid #ffffff; // White spinning element
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes waveform {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.5); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { background-color: rgba(0, 0, 0, 0.1); }
+    50% { background-color: rgba(0, 0, 0, 0.2); }
+  }
+
+  @keyframes move-stripes {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 0; }
+  }
 }
 
 @keyframes spin {
@@ -945,4 +1114,9 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 @keyframes move-stripes {
   0% { background-position: 0 0; }
   100% { background-position: 50px 0; }
+}
+
+@keyframes spinner-orbit {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
