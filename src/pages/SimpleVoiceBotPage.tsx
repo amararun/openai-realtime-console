@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, StopCircle, VolumeX, Volume2, Loader, Clock, MessageCircle, KeyRound } from 'lucide-react';
 import { RingLoader } from 'react-spinners';
 import ReactMarkdown from 'react-markdown';
@@ -70,7 +70,7 @@ interface Message {
 }
 
 export function SimpleVoiceBotPage() {
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('tmp::voice_api_key') || '');
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [conversation, setConversation] = useState<Message[]>([]);
@@ -88,24 +88,133 @@ export function SimpleVoiceBotPage() {
     };
   }, []);
 
-  const startListening = () => {
-    // Implement startListening logic
+  const resetAPIKey = useCallback(() => {
+    const newApiKey = prompt('Enter your OpenAI API key');
+    if (newApiKey !== null) {
+      localStorage.clear();
+      localStorage.setItem('tmp::voice_api_key', newApiKey);
+      setApiKey(newApiKey);
+    }
+  }, []);
+
+  const startListening = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder.current = new MediaRecorder(stream);
+      audioChunks.current = [];
+
+      mediaRecorder.current.ondataavailable = (event) => {
+        audioChunks.current.push(event.data);
+      };
+
+      mediaRecorder.current.onstop = processAudio;
+
+      mediaRecorder.current.start();
+      setIsListening(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+    }
   };
 
   const stopListening = () => {
-    // Implement stopListening logic
+    if (mediaRecorder.current && mediaRecorder.current.state !== 'inactive') {
+      mediaRecorder.current.stop();
+      setIsListening(false);
+    }
   };
 
-  const processAudio = () => {
-    // Implement processAudio logic
+  const processAudio = async () => {
+    setIsProcessing(true);
+    const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'audio.webm');
+    formData.append('model', 'whisper-1');
+
+    try {
+      // Transcribe audio
+      const transcriptionResponse = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: formData,
+      });
+
+      if (!transcriptionResponse.ok) {
+        throw new Error(`HTTP error! status: ${transcriptionResponse.status}`);
+      }
+
+      const transcriptionData = await transcriptionResponse.json();
+      const transcription = transcriptionData.text;
+
+      // Add user message to conversation
+      setConversation(prev => [...prev, { role: 'user', content: transcription }]);
+
+      // Generate chat response
+      const chatResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [{ role: 'user', content: transcription }],
+        }),
+      });
+
+      if (!chatResponse.ok) {
+        throw new Error(`HTTP error! status: ${chatResponse.status}`);
+      }
+
+      const chatData = await chatResponse.json();
+      const assistantMessage = chatData.choices[0].message.content;
+
+      // Generate speech from assistant's response
+      const speechResponse = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'tts-1',
+          input: assistantMessage,
+          voice: 'alloy',
+        }),
+      });
+
+      if (!speechResponse.ok) {
+        throw new Error(`HTTP error! status: ${speechResponse.status}`);
+      }
+
+      const audioBlob = await speechResponse.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // Add assistant message to conversation
+      setConversation(prev => [...prev, { 
+        role: 'assistant', 
+        content: assistantMessage,
+        audioUrl: audioUrl,
+      }]);
+
+      setIsProcessing(false);
+    } catch (error) {
+      console.error('Error processing audio:', error);
+      setIsProcessing(false);
+    }
   };
 
   const playAudio = (audioUrl: string) => {
-    // Implement playAudio logic
+    audioRef.current.src = audioUrl;
+    audioRef.current.play();
+    setIsPlaying(true);
   };
 
   const stopAudio = () => {
-    // Implement stopAudio logic
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    setIsPlaying(false);
   };
 
   const formatTime = (ms: number) => {
@@ -150,9 +259,15 @@ export function SimpleVoiceBotPage() {
               type="password"
               placeholder="Enter your OpenAI API key"
               value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
+              onChange={(e) => {
+                setApiKey(e.target.value);
+                localStorage.setItem('tmp::voice_api_key', e.target.value);
+              }}
               className="mb-6 bg-gray-800 text-white placeholder-gray-500 border-gray-700"
             />
+            <button onClick={resetAPIKey} className="mb-4 text-blue-400 hover:text-blue-300">
+              Reset API Key
+            </button>
             <div className="flex justify-center mb-8 space-x-4">
               <IconButton
                 onClick={startListening}
