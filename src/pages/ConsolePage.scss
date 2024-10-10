@@ -27,151 +27,77 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: $background-color;
   color: $text-color;
 
-  .content-top {
+  .header-section {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-bottom: 1px solid #e1e4e8;
+  }
+
+  .capabilities-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px; // Increased margin between cards and main header
+  }
+
+  .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 16px;
-    margin-bottom: 4px;
+    flex-wrap: nowrap;
+    padding-top: 12px;
+  }
 
-    .content-title {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      flex-shrink: 0; // Prevent title from shrinking
-      
-      .fxis-logo {
-        height: 72px; // Slightly reduced from 96px
-        margin-right: 8px;
-        padding: 0;
-      }
-
-      span {
-        font-size: 28px; // Slightly reduced from 33.6px
-        white-space: nowrap; // Prevent wrapping
-      }
+  .content-title {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    
+    .fxis-logo {
+      height: 56px; // Increased logo size
+      margin-right: 16px;
     }
 
-    .voice-activity-indicator {
-      flex: 0 0 auto;
-      width: 70px;
-      height: 70px;
-      margin: 0 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      background-color: #1a237e;
+    span {
+      font-size: 28px; // Increased font size
+      white-space: nowrap;
+      font-weight: 600;
+      color: #2c3e50; // Darker color for better contrast
+    }
+  }
+
+  .content-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+
+    button, 
+    .api-key-button,
+    .connection-status,
+    .Toggle {
+      height: 28px;
+      padding: 0 8px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .api-key-button {
+      max-width: 110px;
       overflow: hidden;
-      padding: 4px;
-
-      // Remove the previous .spinner styles
-
-      .activity-text {
-        margin-top: 6px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #ffffff;
-      }
+      text-overflow: ellipsis;
     }
 
-    .content-controls {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 8px; // Reduced gap
-      flex-wrap: nowrap; // Prevent wrapping to next line
-
-      button, 
-      .api-key-button,
-      .connection-status,
-      .Toggle {  // Add styles for the Toggle component
-        height: 28px; // Reduced from 32px
-        padding: 0 8px;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        white-space: nowrap;
-      }
-
-      .api-key-button {
-        max-width: 110px; // Increased from 90px
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background-color: transparent;
-        border: 1px solid $border-color;
-        padding: 0 6px; // Changed from padding-left to symmetric padding
-        direction: rtl; // This will make the text align from right to left
-        text-align: left; // This ensures the text starts from the left
-
-        // This will reverse the text back to normal left-to-right
-        span {
-          direction: ltr;
-          display: inline-block;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 100%;
-        }
-      }
-
-      .connection-status {
-        padding: 0 10px;
-      }
-
-      // Specific styles for the Toggle component
-      .Toggle {
-        background-color: #f0f0f0;
-        border: 1px solid #d0d0d0;
-
-        .ToggleOption {
-          padding: 0 8px;
-          height: 100%;
-          display: flex;
-          align-items: center;
-
-          &.selected {
-            background-color: $primary-color; // Changed from black to primary color
-            color: white;
-          }
-        }
-      }
-
-      // Style for the Connect button
-      button {
-        &.action {
-          background-color: $secondary-color; // Use secondary color for Connect button
-          color: white;
-
-          &:hover {
-            background-color: color.scale($secondary-color, $lightness: -10%);
-          }
-        }
-      }
-
-      .custom-toggle {
-        background-color: #f0f0f0;
-        border: 1px solid #d0d0d0;
-        border-radius: 4px;
-        overflow: hidden;
-
-        button {
-          background-color: transparent;
-          border: none;
-          color: $text-color;
-          padding: 6px 12px;
-          transition: background-color 0.3s, color 0.3s;
-
-          &[aria-pressed="true"] {
-            background-color: $primary-color;
-            color: white;
-          }
-        }
-      }
+    .connection-status {
+      padding: 0 10px;
     }
+  }
+
+  .main-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .content-main {
@@ -582,6 +508,417 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     }
   }
+
+  .content-right {
+    .content-block {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: $box-shadow;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+
+      .content-block-title {
+        background-color: $header-background;
+        color: #ffffff;
+        padding: 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .content-block-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        background-color: $content-background;
+        color: $text-color;
+      }
+    }
+
+    .content-top-row {
+      display: flex;
+      height: 50%;
+      margin-bottom: 10px;
+
+      .chart-display, .kv {
+        flex: 1;
+        margin-right: 10px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .google-sheets {
+      height: calc(50% - 10px);
+
+      .content-block-title {
+        .sheet-controls {
+          display: flex;
+          gap: 8px;
+
+          button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+          }
+        }
+      }
+
+      .content-block-body {
+        .iframe-container {
+          height: 100%;
+          overflow: hidden; // Change this from 'auto' to 'hidden'
+
+          iframe {
+            width: 100%; // Change this from 150% to 100%
+            height: 100%;
+            border: none;
+          }
+        }
+      }
+    }
+
+    .content-top-row {
+      display: flex;
+      gap: 12px;
+      height: 300px; // Adjust this value to change the height of the top row
+
+      .chart-display,
+      .kv {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .chart-display {
+      .content-block-body {
+        .chart-scroll-container {
+          height: 100%;
+          overflow-y: auto;
+
+          .chart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 16px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            img {
+              max-width: 100%;
+              max-height: 200px; // Adjust this value to change the maximum height of the chart
+              object-fit: contain;
+            }
+
+            .chart-timestamp {
+              margin-top: 8px;
+              font-size: 12px;
+              color: $light-text-color;
+            }
+          }
+        }
+      }
+    }
+
+    .kv {
+      .content-block-body {
+        overflow-y: auto;
+      }
+    }
+
+    .google-sheets {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .content-block-body {
+        flex: 1;
+        overflow: hidden;
+
+        iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+      }
+    }
+  }
+
+  // Add these styles at the end of your file
+
+  .chart-item {
+    position: relative;
+
+    .expand-chart {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%; // Set a fixed width
+      height: 90%; // Set a fixed height
+      max-width: 1200px; // Set a max-width to prevent it from being too large on big screens
+      max-height: 90vh; // Set a max-height relative to the viewport height
+      overflow: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      img {
+        max-width: 100%;
+        max-height: calc(100% - 40px); // Subtract space for close button
+        object-fit: contain;
+      }
+
+      iframe {
+        width: 100%;
+        height: calc(100% - 40px); // Subtract space for close button
+        border: none;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:hover {
+          background: color.scale($primary-color, $lightness: -10%);
+        }
+      }
+    }
+
+    .sheet-modal {
+      width: 95%; // Make sheet modal slightly larger
+      height: 95%;
+      max-width: 1400px; // Increase max-width for sheet modal
+    }
+  }
+
+  .google-sheets {
+    // ... existing styles
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        z-index: 10;
+      }
+
+      iframe {
+        width: 150%;
+        height: 100%;
+        border: none;
+      }
+    }
+
+    .content-block-title {
+      .sheet-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .sheet-type-toggle {
+          display: flex;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-radius: 4px;
+          overflow: hidden;
+
+          button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 12px; // Reduce font size to fit three buttons
+
+            &.active {
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+
+            &:hover:not(.active) {
+              background-color: rgba(255, 255, 255, 0.1);
+            }
+          }
+        }
+
+        // ... existing styles for other buttons
+      }
+    }
+
+    // ... existing styles
+  }
+
+  // ... rest of the styles
+
+  .content-block.conversation {
+    .content-block-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .expand-conversation {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+
+  .modal-overlay {
+    // ... existing styles ...
+
+    .conversation-modal {
+      width: 90%;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+
+      .conversation-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+
+        .conversation-item {
+          margin-bottom: 16px;
+
+          .speaker {
+            font-weight: bold;
+            margin-right: 8px;
+          }
+
+          .speaker-content {
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
+  }
+
+  .conversation-item {
+    .speaker-content {
+      // Styles for Markdown content
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        margin-bottom: 1em;
+      }
+
+      ul, ol {
+        margin-bottom: 1em;
+        padding-left: 2em;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin-bottom: 1em;
+
+        th, td {
+          border: 1px solid $border-color;
+          padding: 0.5em;
+        }
+
+        th {
+          background-color: color.scale($primary-color, $lightness: 40%);
+        }
+      }
+
+      pre {
+        margin-bottom: 1em;
+        padding: 1em;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+
+      code {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #f5f5f5;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+      }
+    }
+  }
 }
 
 @keyframes spin {
@@ -602,415 +939,4 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 @keyframes move-stripes {
   0% { background-position: 0 0; }
   100% { background-position: 50px 0; }
-}
-
-.content-right {
-  .content-block {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    box-shadow: $box-shadow;
-    border: 1px solid $border-color;
-    border-radius: 4px;
-
-    .content-block-title {
-      background-color: $header-background;
-      color: #ffffff;
-      padding: 10px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .content-block-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      background-color: $content-background;
-      color: $text-color;
-    }
-  }
-
-  .content-top-row {
-    display: flex;
-    height: 50%;
-    margin-bottom: 10px;
-
-    .chart-display, .kv {
-      flex: 1;
-      margin-right: 10px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-  }
-
-  .google-sheets {
-    height: calc(50% - 10px);
-
-    .content-block-title {
-      .sheet-controls {
-        display: flex;
-        gap: 8px;
-
-        button {
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 4px;
-          border-radius: 4px;
-          transition: background-color 0.2s;
-
-          &:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-          }
-        }
-      }
-    }
-
-    .content-block-body {
-      .iframe-container {
-        height: 100%;
-        overflow: hidden; // Change this from 'auto' to 'hidden'
-
-        iframe {
-          width: 100%; // Change this from 150% to 100%
-          height: 100%;
-          border: none;
-        }
-      }
-    }
-  }
-
-  .content-top-row {
-    display: flex;
-    gap: 12px;
-    height: 300px; // Adjust this value to change the height of the top row
-
-    .chart-display,
-    .kv {
-      flex: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  .chart-display {
-    .content-block-body {
-      .chart-scroll-container {
-        height: 100%;
-        overflow-y: auto;
-
-        .chart-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          margin-bottom: 16px;
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-
-          img {
-            max-width: 100%;
-            max-height: 200px; // Adjust this value to change the maximum height of the chart
-            object-fit: contain;
-          }
-
-          .chart-timestamp {
-            margin-top: 8px;
-            font-size: 12px;
-            color: $light-text-color;
-          }
-        }
-      }
-    }
-  }
-
-  .kv {
-    .content-block-body {
-      overflow-y: auto;
-    }
-  }
-
-  .google-sheets {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    .content-block-body {
-      flex: 1;
-      overflow: hidden;
-
-      iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-      }
-    }
-  }
-}
-
-// Add these styles at the end of your file
-
-.chart-item {
-  position: relative;
-
-  .expand-chart {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.7);
-    border: none;
-    border-radius: 50%;
-    padding: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.9);
-    }
-  }
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%; // Set a fixed width
-    height: 90%; // Set a fixed height
-    max-width: 1200px; // Set a max-width to prevent it from being too large on big screens
-    max-height: 90vh; // Set a max-height relative to the viewport height
-    overflow: auto;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    img {
-      max-width: 100%;
-      max-height: calc(100% - 40px); // Subtract space for close button
-      object-fit: contain;
-    }
-
-    iframe {
-      width: 100%;
-      height: calc(100% - 40px); // Subtract space for close button
-      border: none;
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: $primary-color;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 5px 10px;
-      cursor: pointer;
-      transition: background 0.3s;
-
-      &:hover {
-        background: color.scale($primary-color, $lightness: -10%);
-      }
-    }
-  }
-
-  .sheet-modal {
-    width: 95%; // Make sheet modal slightly larger
-    height: 95%;
-    max-width: 1400px; // Increase max-width for sheet modal
-  }
-}
-
-.google-sheets {
-  // ... existing styles
-
-  .iframe-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      z-index: 10;
-    }
-
-    iframe {
-      width: 150%;
-      height: 100%;
-      border: none;
-    }
-  }
-
-  .content-block-title {
-    .sheet-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .sheet-type-toggle {
-        display: flex;
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        overflow: hidden;
-
-        button {
-          background: none;
-          border: none;
-          color: white;
-          padding: 4px 8px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-          font-size: 12px; // Reduce font size to fit three buttons
-
-          &.active {
-            background-color: rgba(255, 255, 255, 0.2);
-          }
-
-          &:hover:not(.active) {
-            background-color: rgba(255, 255, 255, 0.1);
-          }
-        }
-      }
-
-      // ... existing styles for other buttons
-    }
-  }
-
-  // ... existing styles
-}
-
-// ... rest of the styles
-
-.content-block.conversation {
-  .content-block-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .expand-conversation {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      border-radius: 4px;
-      transition: background-color 0.2s;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-    }
-  }
-}
-
-.modal-overlay {
-  // ... existing styles ...
-
-  .conversation-modal {
-    width: 90%;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-
-    .conversation-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-
-      .conversation-item {
-        margin-bottom: 16px;
-
-        .speaker {
-          font-weight: bold;
-          margin-right: 8px;
-        }
-
-        .speaker-content {
-          white-space: pre-wrap;
-        }
-      }
-    }
-  }
-}
-
-.conversation-item {
-  .speaker-content {
-    // Styles for Markdown content
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1em;
-      margin-bottom: 0.5em;
-    }
-
-    p {
-      margin-bottom: 1em;
-    }
-
-    ul, ol {
-      margin-bottom: 1em;
-      padding-left: 2em;
-    }
-
-    table {
-      border-collapse: collapse;
-      margin-bottom: 1em;
-
-      th, td {
-        border: 1px solid $border-color;
-        padding: 0.5em;
-      }
-
-      th {
-        background-color: color.scale($primary-color, $lightness: 40%);
-      }
-    }
-
-    pre {
-      margin-bottom: 1em;
-      padding: 1em;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-      overflow-x: auto;
-    }
-
-    code {
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #f5f5f5;
-      padding: 0.2em 0.4em;
-      border-radius: 3px;
-    }
-  }
 }

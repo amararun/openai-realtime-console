@@ -1,0 +1,25 @@
+.capability-card {
+  background-color: #3498db; // Changed to a vibrant blue color
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    background-color: #2980b9; // Darker blue on hover
+  }
+
+  .capability-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff; // White text for better contrast
+    line-height: 1.2;
+  }
+}

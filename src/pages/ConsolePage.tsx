@@ -79,6 +79,7 @@ const sanitizeHtml = (html: string) => {
              .replace(/"/g, '&quot;')
              .replace(/'/g, '&#039;');
 };
+import { CapabilityCard } from '../components/CapabilityCard';
 
 export function ConsolePage() {
   /**
@@ -865,48 +866,60 @@ export function ConsolePage() {
     setIsConversationModalOpen(true);
   };
 
+  const capabilities = [
+    { title: "MySQL DW" },
+    { title: "Text-to-SQL" },
+    { title: "Analyze Data" },
+    { title: "Python Charts" },
+    { title: "Yahoo Finance" },
+    { title: "Update Trackers" },
+    { title: "Slide Deck" },
+    { title: "Email Reports" },
+  ];
+
   /**
    * Render the application
    */
   return (
     <div data-component="ConsolePage">
-      <div className="content-top">
-        <div className="content-title">
-          <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-          <span>Realtime Analytics Assistant</span>
+      <div className="header-section">
+        <div className="capabilities-section">
+          {capabilities.map((capability, index) => (
+            <CapabilityCard key={index} title={capability.title} />
+          ))}
         </div>
-        {isConnected && (
-          <div className="voice-activity-indicator">
-            <RingLoader color="#ffffff" size={40} />
-            <span className="activity-text">Listening</span>
+        <div className="main-header">
+          <div className="content-title">
+            <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
+            <span>Realtime Analytics Assistant</span>
           </div>
-        )}
-        <div className="content-controls">
-          <Toggle
-            defaultValue={true}
-            labels={['MANUAL', 'VAD']}
-            values={['none', 'server_vad']}
-            onChange={(_, value) => changeTurnEndType(value)}
-          />
-          <Button
-            label={isConnected ? 'DISCONNECT' : 'CONNECT'}
-            iconPosition={isConnected ? 'end' : 'start'}
-            icon={isConnected ? X : Zap}
-            buttonStyle={isConnected ? 'regular' : 'action'}
-            onClick={isConnected ? disconnectConversation : connectConversation}
-          />
-          {!LOCAL_RELAY_SERVER_URL && (
-            <Button
-              icon={Edit}
-              iconPosition="end"
-              buttonStyle="flush"
-              className="api-key-button"
-              onClick={() => resetAPIKey()}
-              label={`API KEY: ${apiKey.slice(0, 3)}...`}  // Add this line
+          <div className="content-controls">
+            <Toggle
+              defaultValue={true}
+              labels={['MANUAL', 'VAD']}
+              values={['none', 'server_vad']}
+              onChange={(_, value) => changeTurnEndType(value)}
             />
-          )}
-          <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
-            {isConnected ? 'Connected' : 'Disconnected'}
+            <Button
+              label={isConnected ? 'DISCONNECT' : 'CONNECT'}
+              iconPosition={isConnected ? 'end' : 'start'}
+              icon={isConnected ? X : Zap}
+              buttonStyle={isConnected ? 'regular' : 'action'}
+              onClick={isConnected ? disconnectConversation : connectConversation}
+            />
+            {!LOCAL_RELAY_SERVER_URL && (
+              <Button
+                icon={Edit}
+                iconPosition="end"
+                buttonStyle="flush"
+                className="api-key-button"
+                onClick={() => resetAPIKey()}
+                label={`API KEY: ${apiKey.slice(0, 3)}...`}
+              />
+            )}
+            <div className={`connection-status ${isConnected ? 'connected' : 'disconnected'}`}>
+              {isConnected ? 'Connected' : 'Disconnected'}
+            </div>
           </div>
         </div>
       </div>
