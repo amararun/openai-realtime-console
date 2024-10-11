@@ -1294,7 +1294,7 @@ export function ConsolePage() {
         <div className="modal-overlay" onClick={() => setIsAgentModalOpen(false)}>
           <div className="modal-content agent-modal" onClick={(e) => e.stopPropagation()}>
             <iframe
-              src="https://flowise.tigzig.com/chatbot/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5"
+              src="https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf"
               width="100%"
               height="100%"
               frameBorder="0"
@@ -1303,7 +1303,7 @@ export function ConsolePage() {
             <div className="agent-modal-actions">
               <button className="close-modal" onClick={() => setIsAgentModalOpen(false)}>Close</button>
               <a
-                href="https://flowise.tigzig.com/chatbot/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5"
+                href="https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="full-page-link"
