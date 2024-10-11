@@ -876,8 +876,8 @@ export function ConsolePage() {
 
   const capabilities = [
     { title: "Text-to-SQL" },
-    { title: "Python" },
     { title: "MySQL DWH" },
+    { title: "Python" },
     { title: "Analysis" },
     { title: "Charts" },
     { title: "Trackers" },

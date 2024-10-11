@@ -556,10 +556,11 @@ $right-header-color: #162b4f; // A mix of blue and grey
 
   .content-footer {
     background-color: white;
-    color: $light-text-color;
+    color: #411768;
     padding: 16px;
     text-align: center;
-    font-size: 14px;
+    font-size: 20px;
+    font-weight: bold; /* Make text bold */
     border-top: 1px solid $border-color;
   }
 
