@@ -10,9 +10,7 @@
  */
 const LOCAL_RELAY_SERVER_URL: string =
   process.env.REACT_APP_LOCAL_RELAY_SERVER_URL || '';
-
 import { useEffect, useRef, useCallback, useState } from 'react';
-
 import { RealtimeClient } from '@openai/realtime-api-beta';
 import { ItemType } from '@openai/realtime-api-beta/dist/lib/client.js';
 import { WavRecorder, WavStreamPlayer } from '../lib/wavtools/index.js';
@@ -74,16 +72,20 @@ SyntaxHighlighter.registerLanguage('typescript', typescript);
 // Add this function to replace formatText
 const sanitizeHtml = (html: string) => {
   return html.replace(/&/g, '&amp;')
-             .replace(/</g, '&lt;')
-             .replace(/>/g, '&gt;')
-             .replace(/"/g, '&quot;')
-             .replace(/'/g, '&#039;');
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 };
 import { CapabilityCard } from '../components/CapabilityCard';
 
 import React from 'react';
 
 export function ConsolePage() {
+  const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
+  const openAgentModal = () => {
+    setIsAgentModalOpen(true);
+  };
   /**
    * Ask user for API Key
    * If we're using the local relay server, we don't need this
@@ -91,8 +93,8 @@ export function ConsolePage() {
   const apiKey = LOCAL_RELAY_SERVER_URL
     ? ''
     : localStorage.getItem('tmp::voice_api_key') ||
-      prompt('OpenAI API Key') ||
-      '';
+    prompt('OpenAI API Key') ||
+    '';
   if (apiKey !== '') {
     localStorage.setItem('tmp::voice_api_key', apiKey);
   }
@@ -114,9 +116,9 @@ export function ConsolePage() {
       LOCAL_RELAY_SERVER_URL
         ? { url: LOCAL_RELAY_SERVER_URL }
         : {
-            apiKey: apiKey,
-            dangerouslyAllowAPIKeyInBrowser: true,
-          }
+          apiKey: apiKey,
+          dangerouslyAllowAPIKeyInBrowser: true,
+        }
     )
   );
 
@@ -197,12 +199,12 @@ export function ConsolePage() {
   const handleRefresh = useCallback(() => {
     setIsSheetLoading(true);
     const timestamp = new Date().getTime();
-    const newUrl = sheetType === 'google' 
+    const newUrl = sheetType === 'google'
       ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false&rand=${timestamp}`
       : sheetType === 'excel'
-      ? `${excelSheetUrl}&rand=${timestamp}`
-      : `${googleDocsUrl}&rand=${timestamp}`;
-    
+        ? `${excelSheetUrl}&rand=${timestamp}`
+        : `${googleDocsUrl}&rand=${timestamp}`;
+
     console.log('Refreshing sheet with new URL:', newUrl);
 
     if (iframeRef.current) {
@@ -220,11 +222,11 @@ export function ConsolePage() {
   // Update the handleSheetTypeChange function
   const handleSheetTypeChange = (type: 'google' | 'excel' | 'docs') => {
     setSheetType(type);
-    setSheetUrl(type === 'google' 
+    setSheetUrl(type === 'google'
       ? `https://docs.google.com/spreadsheets/d/e/2PACX-1vT-ASVIfFJ4HdqIjq-2fSar4taGxlUutrZCeH1dFgfT6o-baBFQHLtJcGwgretrT2NmqtbQe7FbmxiS/pubhtml?widget=true&headers=false`
       : type === 'excel'
-      ? excelSheetUrl
-      : googleDocsUrl
+        ? excelSheetUrl
+        : googleDocsUrl
     );
     setIframeKey(prevKey => prevKey + 1);
   };
@@ -373,7 +375,7 @@ export function ConsolePage() {
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
     const wavStreamPlayer = wavStreamPlayerRef.current;
-    
+
     if (client.isConnected()) {
       const trackSampleOffset = await wavStreamPlayer.interrupt();
       if (trackSampleOffset?.trackId) {
@@ -394,7 +396,7 @@ export function ConsolePage() {
     setIsWaitingForResponse(true);  // Set this to true when stopping recording
     const client = clientRef.current;
     const wavRecorder = wavRecorderRef.current;
-    
+
     await wavRecorder.pause();
     if (client.isConnected()) {
       client.createResponse();
@@ -659,13 +661,13 @@ export function ConsolePage() {
       }
     );
     */
-    
+
 
     client.addTool(
       {
         name: 'tool_multitask_api',
         description:
-        'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also query AWS and Azure data warehouses. So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Further more, use this  the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also query AWS and Azure data warehouses. So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Further more, use this  the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -685,7 +687,7 @@ export function ConsolePage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             question,
             overrideConfig: {
               sessionId: sessionId
@@ -706,7 +708,7 @@ export function ConsolePage() {
           if (contentType && contentType.includes("application/json")) {
             const jsonResponse = await response.json();
             console.log('JSON Response:', JSON.stringify(jsonResponse, null, 2));
-            
+
             if (jsonResponse.artifacts && jsonResponse.artifacts.length > 0) {
               const imageArtifact = jsonResponse.artifacts.find((artifact: any) => artifact.type === 'png' || artifact.type === 'gif');
               if (imageArtifact) {
@@ -726,7 +728,7 @@ export function ConsolePage() {
                 return jsonResponse.text || "Image generated successfully. It will be displayed in the chart area.";
               }
             }
-            
+
             return jsonResponse.text || JSON.stringify(jsonResponse);
           } else if (contentType && (contentType.includes("text/plain") || contentType.includes("application/octet-stream"))) {
             const textResponse = await response.text();
@@ -988,9 +990,9 @@ export function ConsolePage() {
                     {conversationItem.role === 'user' && (
                       <span>
                         {conversationItem.formatted.transcript ||
-                        (conversationItem.formatted.audio?.length
-                          ? '(awaiting transcript)'
-                          : conversationItem.formatted.text ||
+                          (conversationItem.formatted.audio?.length
+                            ? '(awaiting transcript)'
+                            : conversationItem.formatted.text ||
                             '(item sent)')}
                       </span>
                     )}
@@ -1017,8 +1019,8 @@ export function ConsolePage() {
                         }}
                       >
                         {conversationItem.formatted.transcript ||
-                         conversationItem.formatted.text ||
-                         '(truncated)'}
+                          conversationItem.formatted.text ||
+                          '(truncated)'}
                       </ReactMarkdown>
                     )}
                   </span>
@@ -1049,6 +1051,14 @@ export function ConsolePage() {
                     </span>
                   </div>
                 ))}
+              </div>
+            </div>
+            <div className="content-block agent">
+              <div className="content-block-title">AGENT</div>
+              <div className="agent-content">
+                <button className="agent-button" onClick={openAgentModal}>
+                  <Zap size={24} />
+                </button>
               </div>
             </div>
             <div className="content-block visualization">
@@ -1088,7 +1098,7 @@ export function ConsolePage() {
                 <div className="chart-scroll-container">
                   {charts.length > 0 ? (
                     charts.map((chart, index) => (
-                      <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`} style={{display: index === currentChartIndex ? 'flex' : 'none'}}>
+                      <div key={chart.timestamp} className={`chart-item ${index === currentChartIndex ? 'active' : ''}`} style={{ display: index === currentChartIndex ? 'flex' : 'none' }}>
                         <img src={chart.url} alt={`Generated Chart ${index + 1}`} />
                         <div className="chart-timestamp">{new Date(chart.timestamp).toLocaleTimeString()}</div>
                         <button className="expand-chart" onClick={() => openModal(chart.url)}>
@@ -1110,20 +1120,20 @@ export function ConsolePage() {
               SHEETS & DOCS
               <div className="sheet-controls">
                 <div className="sheet-type-toggle">
-                  <button 
-                    className={sheetType === 'google' ? 'active' : ''} 
+                  <button
+                    className={sheetType === 'google' ? 'active' : ''}
                     onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('google'); }}
                   >
                     Google
                   </button>
-                  <button 
-                    className={sheetType === 'excel' ? 'active' : ''} 
+                  <button
+                    className={sheetType === 'excel' ? 'active' : ''}
                     onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('excel'); }}
                   >
                     Excel
                   </button>
-                  <button 
-                    className={sheetType === 'docs' ? 'active' : ''} 
+                  <button
+                    className={sheetType === 'docs' ? 'active' : ''}
                     onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('docs'); }}
                   >
                     Docs
@@ -1173,11 +1183,11 @@ export function ConsolePage() {
         <div className="modal-overlay" onClick={() => setIsSheetModalOpen(false)}>
           <div className="modal-content sheet-modal" onClick={(e) => e.stopPropagation()}>
             <iframe
-              src={sheetType === 'google' 
+              src={sheetType === 'google'
                 ? "https://docs.google.com/spreadsheets/d/1LPV1pZb4Bc3TMVAYqqH8MCNU55Ew8oB1K8MZMu2cfp0/edit?usp=sharing"
                 : sheetType === 'excel'
-                ? excelSheetUrl
-                : googleDocsEditableUrl}
+                  ? excelSheetUrl
+                  : googleDocsEditableUrl}
               width="100%"
               height="100%"
               frameBorder="0"
@@ -1211,9 +1221,9 @@ export function ConsolePage() {
                     {conversationItem.role === 'user' && (
                       <span>
                         {conversationItem.formatted.transcript ||
-                        (conversationItem.formatted.audio?.length
-                          ? '(awaiting transcript)'
-                          : conversationItem.formatted.text ||
+                          (conversationItem.formatted.audio?.length
+                            ? '(awaiting transcript)'
+                            : conversationItem.formatted.text ||
                             '(item sent)')}
                       </span>
                     )}
@@ -1240,8 +1250,8 @@ export function ConsolePage() {
                         }}
                       >
                         {conversationItem.formatted.transcript ||
-                         conversationItem.formatted.text ||
-                         '(truncated)'}
+                          conversationItem.formatted.text ||
+                          '(truncated)'}
                       </ReactMarkdown>
                     )}
                   </span>
@@ -1252,6 +1262,30 @@ export function ConsolePage() {
               )}
             </div>
             <button className="close-modal" onClick={() => setIsConversationModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
+      {isAgentModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAgentModalOpen(false)}>
+          <div className="modal-content agent-modal" onClick={(e) => e.stopPropagation()}>
+            <iframe
+              src="https://flowise.tigzig.com/chatbot/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              allowFullScreen={true}
+            ></iframe>
+            <div className="agent-modal-actions">
+              <button className="close-modal" onClick={() => setIsAgentModalOpen(false)}>Close</button>
+              <a
+                href="https://flowise.tigzig.com/chatbot/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="full-page-link"
+              >
+                Full Page
+              </a>
+            </div>
           </div>
         </div>
       )}
