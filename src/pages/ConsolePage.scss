@@ -1323,6 +1323,23 @@ $right-header-color: #162b4f; // A mix of blue and grey
     align-items: center;
     flex-wrap: nowrap;
     padding-top: 12px;
+
+    .agent-button-header {
+      margin-left: 15px;
+      padding: 5px 10px;
+      background-color: #0099ff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #66c2ff;
+      }
+    }
   }
 
   .content-title {

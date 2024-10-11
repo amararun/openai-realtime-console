@@ -912,6 +912,7 @@ export function ConsolePage() {
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
             <span>Realtime Analytics Assistant</span>
+            <button className="agent-button-header" onClick={openAgentModal}>AGENT</button>
           </div>
           <div className="content-controls">
             {isConnected && canPushToTalk && (
