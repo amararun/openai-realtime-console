@@ -26,7 +26,7 @@
 }
 
 .CapabilityCard {
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  background: linear-gradient(135deg, #194f8d, #174573); // Changed to blue-grey gradient
   color: white;
   padding: 6px 4px; // Reduced padding
   border-radius: 6px;
@@ -43,6 +43,7 @@
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #34495e, #2c3e50); // Changed hover gradient
   }
 
   &-title {

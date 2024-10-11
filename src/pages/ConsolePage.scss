@@ -1316,22 +1316,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
     padding: 0 4px;
   }
 
-  .capability-card {
-    background-color: #1f3956;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-align: center;
-
-    &:hover {
-      background-color: #3a7bc8;
-    }
-  }
-
+  
   .main-header {
     display: flex;
     justify-content: space-between;
