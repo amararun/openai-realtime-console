@@ -536,78 +536,78 @@ export function ConsolePage() {
     client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
 
     // Add tools
-    client.addTool(
-      {
-        name: 'set_memory',
-        description: 'Add quick notes requested by the user',
-        parameters: {
-          type: 'object',
-          properties: {
-            key: {
-              type: 'string',
-              description:
-                'A short heading for the notes value. Always use uppercase  underscores, no other characters.',
-            },
-            value: {
-              type: 'string',
-              description: 'This is the note description that has been requested by the user to be saved. Maximum 30 words. Summarize as required. If no description is provided, then keep this empty',
-            },
-          },
-          required: ['key', 'value'],
-        },
-      },
-      async ({ key, value }: { [key: string]: any }) => {
-        setMemoryKv((memoryKv) => {
-          const newKv = { ...memoryKv };
-          newKv[key] = value;
-          return newKv;
-        });
-        return { ok: true };
-      }
-    );
-    client.addTool(
-      {
-        name: 'get_weather',
-        description:
-          'Retrieves the weather for a given lat, lng coordinate pair. Specify a label for the location.',
-        parameters: {
-          type: 'object',
-          properties: {
-            lat: {
-              type: 'number',
-              description: 'Latitude',
-            },
-            lng: {
-              type: 'number',
-              description: 'Longitude',
-            },
-            location: {
-              type: 'string',
-              description: 'Name of the location',
-            },
-          },
-          required: ['lat', 'lng', 'location'],
-        },
-      },
-      async ({ lat, lng, location }: { [key: string]: any }) => {
-        setMarker({ lat, lng, location });
-        setCoords({ lat, lng, location });
-        const result = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`
-        );
-        const json = await result.json();
-        const temperature = {
-          value: json.current.temperature_2m as number,
-          units: json.current_units.temperature_2m as string,
-        };
-        const wind_speed = {
-          value: json.current.wind_speed_10m as number,
-          units: json.current_units.wind_speed_10m as string,
-        };
-        setMarker({ lat, lng, location, temperature, wind_speed });
-        return json;
-      }
-    );
+    // client.addTool(
+    //   {
+    //     name: 'set_memory',
+    //     description: 'Add quick notes requested by the user',
+    //     parameters: {
+    //       type: 'object',
+    //       properties: {
+    //         key: {
+    //           type: 'string',
+    //           description:
+    //             'A short heading for the notes value. Always use uppercase  underscores, no other characters.',
+    //         },
+    //         value: {
+    //           type: 'string',
+    //           description: 'This is the note description that has been requested by the user to be saved. Maximum 30 words. Summarize as required. If no description is provided, then keep this empty',
+    //         },
+    //       },
+    //       required: ['key', 'value'],
+    //     },
+    //   },
+    //   async ({ key, value }: { [key: string]: any }) => {
+    //     setMemoryKv((memoryKv) => {
+    //       const newKv = { ...memoryKv };
+    //       newKv[key] = value;
+    //       return newKv;
+    //     });
+    //     return { ok: true };
+    //   }
+    // );
+    // client.addTool(
+    //   {
+    //     name: 'get_weather',
+    //     description:
+    //       'Retrieves the weather for a given lat, lng coordinate pair. Specify a label for the location.',
+    //     parameters: {
+    //       type: 'object',
+    //       properties: {
+    //         lat: {
+    //           type: 'number',
+    //           description: 'Latitude',
+    //         },
+    //         lng: {
+    //           type: 'number',
+    //           description: 'Longitude',
+    //         },
+    //         location: {
+    //           type: 'string',
+    //           description: 'Name of the location',
+    //         },
+    //       },
+    //       required: ['lat', 'lng', 'location'],
+    //     },
+    //   },
+    //   async ({ lat, lng, location }: { [key: string]: any }) => {
+    //     setMarker({ lat, lng, location });
+    //     setCoords({ lat, lng, location });
+    //     const result = await fetch(
+    //       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`
+    //     );
+    //     const json = await result.json();
+    //     const temperature = {
+    //       value: json.current.temperature_2m as number,
+    //       units: json.current_units.temperature_2m as string,
+    //     };
+    //     const wind_speed = {
+    //       value: json.current.wind_speed_10m as number,
+    //       units: json.current_units.wind_speed_10m as string,
+    //     };
+    //     setMarker({ lat, lng, location, temperature, wind_speed });
+    //     return json;
+    //   }
+    // );
 
 
     // Comment out the tool_database_query
