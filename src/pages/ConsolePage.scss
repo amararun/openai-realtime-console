@@ -440,7 +440,21 @@ $nav-text-color: #ffffff; // White text for navigation
         }
 
         .content-block-title {
-          padding: 0 8px; // Reduce horizontal padding
+          padding: 0 12px; // Restore horizontal padding
+          font-size: 14px;
+          font-weight: 500;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $primary-color, color.scale($primary-color, $lightness: 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px; // Fixed height to match conversation box
+          display: flex;
+          align-items: center; // Vertically center the text
+          justify-content: space-between; // Space between title and navigation buttons
+          margin: 0;
+          line-height: 36px; // Match the height for perfect centering
         }
       }
 
