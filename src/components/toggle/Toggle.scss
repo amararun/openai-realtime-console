@@ -6,18 +6,18 @@
   cursor: pointer;
   overflow: hidden;
 
-  background-color: #ececf1;
-  color: #101010;
+  background-color: #e6f4e6; // Lighter green background
+  color: #006400; // Dark green text
   height: 40px;
   border-radius: 1000px;
 
   &:hover {
-    background-color: #d8d8d8;
+    background-color: #d1e8d1; // Slightly darker green on hover
   }
 
   div.label {
     position: relative;
-    color: #666;
+    color: #006400; // Dark green text for labels
     transition: color 0.1s ease-in-out;
     padding: 0px 16px;
     z-index: 2;
@@ -29,7 +29,7 @@
   }
 
   .toggle-background {
-    background-color: #101010;
+    background-color: #008000; // Darker green for the toggle background
     position: absolute;
     top: 0px;
     left: 0px;
@@ -42,13 +42,13 @@
 
   &[data-enabled='true'] {
     div.label.right {
-      color: #fff;
+      color: #ffffff; // White text for enabled state
     }
   }
 
   &[data-enabled='false'] {
     div.label.left {
-      color: #fff;
+      color: #ffffff; // White text for disabled state
     }
   }
 }
