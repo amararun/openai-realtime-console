@@ -607,6 +607,7 @@ export function ConsolePage() {
       }
     );
 
+
     // Comment out the tool_database_query
     /*
     client.addTool(
@@ -882,6 +883,14 @@ export function ConsolePage() {
     { title: "Email Reports" },
   ];
 
+  // Update the Google Sheets section
+  const [isSheetCollapsed, setIsSheetCollapsed] = useState(true);
+
+  // Add this function to toggle sheet collapse
+  const toggleSheetCollapse = () => {
+    setIsSheetCollapsed(!isSheetCollapsed);
+  };
+
   /**
    * Render the application
    */
@@ -899,6 +908,15 @@ export function ConsolePage() {
             <span>Realtime Analytics Assistant</span>
           </div>
           <div className="content-controls">
+            {isConnected && canPushToTalk && (
+              <Button
+                label="Talk"
+                buttonStyle={isRecording ? 'alert' : 'regular'}
+                disabled={!isConnected || !canPushToTalk}
+                onMouseDown={startRecording}
+                onMouseUp={stopRecording}
+              />
+            )}
             <div className="spinner-container">
               {isConnected && (
                 <div className="spinner">
@@ -908,7 +926,7 @@ export function ConsolePage() {
             </div>
             <Toggle
               defaultValue={true}
-              labels={['MANUAL', 'VAD']}
+              labels={['MANUAL', 'RT']}
               values={['none', 'server_vad']}
               onChange={(_, value) => changeTurnEndType(value)}
             />
@@ -1045,15 +1063,6 @@ export function ConsolePage() {
           </div>
           <div className="content-actions">
             <div className="spacer" />
-            {isConnected && canPushToTalk && (
-              <Button
-                label={isRecording ? 'RELEASE TO SEND' : 'PUSH TO TALK'}
-                buttonStyle={isRecording ? 'alert' : 'regular'}
-                disabled={!isConnected || !canPushToTalk}
-                onMouseDown={startRecording}
-                onMouseUp={stopRecording}
-              />
-            )}
             <div className="spacer" />
           </div>
         </div>
@@ -1092,35 +1101,38 @@ export function ConsolePage() {
               </div>
             </div>
           </div>
-          <div className="content-block google-sheets">
-            <div className="content-block-title">
+          <div className={`content-block google-sheets ${isSheetCollapsed ? 'collapsed' : ''}`}>
+            <div className="content-block-title" onClick={toggleSheetCollapse}>
               SHEETS & DOCS
               <div className="sheet-controls">
                 <div className="sheet-type-toggle">
                   <button 
                     className={sheetType === 'google' ? 'active' : ''} 
-                    onClick={() => handleSheetTypeChange('google')}
+                    onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('google'); }}
                   >
                     Google
                   </button>
                   <button 
                     className={sheetType === 'excel' ? 'active' : ''} 
-                    onClick={() => handleSheetTypeChange('excel')}
+                    onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('excel'); }}
                   >
                     Excel
                   </button>
                   <button 
                     className={sheetType === 'docs' ? 'active' : ''} 
-                    onClick={() => handleSheetTypeChange('docs')}
+                    onClick={(e) => { e.stopPropagation(); handleSheetTypeChange('docs'); }}
                   >
                     Docs
                   </button>
                 </div>
-                <button className="refresh-button" onClick={handleRefresh} disabled={isSheetLoading}>
+                <button className="refresh-button" onClick={(e) => { e.stopPropagation(); handleRefresh(); }} disabled={isSheetLoading}>
                   {isSheetLoading ? <Loader size={16} /> : <RefreshCw size={16} />}
                 </button>
-                <button className="expand-sheet" onClick={openSheetModal}>
+                <button className="expand-sheet" onClick={(e) => { e.stopPropagation(); openSheetModal(); }}>
                   <Maximize2 size={16} />
+                </button>
+                <button className="toggle-collapse" onClick={(e) => { e.stopPropagation(); toggleSheetCollapse(); }}>
+                  {isSheetCollapsed ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </button>
               </div>
             </div>

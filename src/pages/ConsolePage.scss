@@ -34,16 +34,16 @@ $nav-text-color: #ffffff; // White text for navigation
   .header-section {
     display: flex;
     flex-direction: column;
-    padding: 8px 12px; // Reduced padding
+    padding: 4px 8px; // Reduced padding
     border-bottom: 1px solid #e1e4e8;
   }
 
   .capabilities-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 8px; // Reduced gap
-    margin-bottom: 8px; // Reduced margin
-    padding: 0 4px; // Added small horizontal padding
+    gap: 4px; // Reduced gap
+    margin-bottom: 4px; // Reduced margin
+    padding: 0 2px; // Reduced horizontal padding
   }
 
   .main-header {
@@ -51,7 +51,7 @@ $nav-text-color: #ffffff; // White text for navigation
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    padding-top: 12px;
+    padding-top: 8px; // Reduced padding
   }
 
   .content-title {
@@ -60,12 +60,12 @@ $nav-text-color: #ffffff; // White text for navigation
     flex-shrink: 0;
     
     .fxis-logo {
-      height: 64px; // Increased logo size
-      margin-right: 16px;
+      height: 48px; // Reduced logo size
+      margin-right: 8px; // Reduced margin
     }
 
     span {
-      font-size: 32px; // Increased font size
+      font-size: 24px; // Reduced font size
       white-space: nowrap;
       font-weight: 600;
       color: #2c3e50;
@@ -75,7 +75,7 @@ $nav-text-color: #ffffff; // White text for navigation
   .content-controls {
     display: flex;
     align-items: center;
-    gap: 16px; // Increased gap to create more space between elements
+    gap: 8px; // Reduced gap
     flex-shrink: 0;
 
     .spinner-container {
@@ -168,6 +168,12 @@ $nav-text-color: #ffffff; // White text for navigation
         &:hover {
           background-color: #dc2626; // Darker red on hover
         }
+      }
+
+      &[label="Talk"] {
+        font-size: 12px;
+        padding: 4px 8px;
+        height: 24px;
       }
     }
 
@@ -1123,6 +1129,87 @@ $nav-text-color: #ffffff; // White text for navigation
           }
         }
       }
+    }
+  }
+
+  .content-right {
+    // ... existing styles ...
+
+    .google-sheets {
+      transition: all 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      overflow: hidden;
+
+      &.collapsed {
+        flex: 0 0 auto;
+        height: 36px; // Height of the header
+
+        .content-block-body {
+          display: none;
+        }
+      }
+
+      .content-block-title {
+        cursor: pointer;
+        user-select: none;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background-image: linear-gradient(to right, $primary-color, color.scale($primary-color, $lightness: 15%));
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .content-block-body {
+        flex: 1;
+        overflow: hidden;
+      }
+    }
+
+    // Adjust the chart display to take up more space when sheets are collapsed
+    .content-top-row {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-display {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      margin-bottom: 4px; // Add some space between chart and collapsed sheets
+
+      .content-block-body {
+        flex: 1;
+        overflow: hidden;
+      }
+    }
+  }
+
+  // Add styles for the new toggle-collapse button
+  .toggle-collapse {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
