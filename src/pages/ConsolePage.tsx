@@ -875,15 +875,16 @@ export function ConsolePage() {
   };
 
   const capabilities = [
-    { title: "MySQL DW" },
     { title: "Text-to-SQL" },
-    { title: "Analyze Data" },
-    { title: "Python Charts" },
-    { title: "Yahoo Finance" },
+    { title: "Python" },
+    { title: "MySQL DWH" },
+    { title: "Analysis" },
+    { title: "Charts" },
     { title: "Trackers" },
-    { title: "Slide Deck" },
+    { title: "Deck" },
     { title: "Email" },
     { title: "Research" },
+    { title: "Yahoo Fin." }
   ];
 
   // Update the Google Sheets section
