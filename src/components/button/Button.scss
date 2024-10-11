@@ -5,10 +5,10 @@
   font-family: 'Roboto Mono', monospace;
   font-size: 12px;
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 600;
   font-style: normal;
   border: none;
-  background-color: #ececf1;
+  background-color: #88d397;
   color: #101010;
   border-radius: 1000px;
   padding: 8px 24px;
@@ -17,10 +17,10 @@
   outline: none;
 
   &.button-style-action {
-    background-color: #101010;
-    color: #ececf1;
+    background-color: #df3434;
+    color: #ecf1ed;
     &:hover:not([disabled]) {
-      background-color: #404040;
+      background-color: #b32727;
     }
   }
 

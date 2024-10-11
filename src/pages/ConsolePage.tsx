@@ -962,7 +962,7 @@ export function ConsolePage() {
             <Button
               label={isConnected ? 'DISCONNECT' : 'CONNECT'}
               iconPosition={isConnected ? 'end' : 'start'}
-              icon={isConnected ? X : Zap}
+              // icon={isConnected ? X : Zap}
               buttonStyle={isConnected ? 'regular' : 'action'}
               onClick={isConnected ? disconnectConversation : connectConversation}
             />
