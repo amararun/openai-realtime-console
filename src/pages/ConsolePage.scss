@@ -404,6 +404,7 @@ $nav-text-color: #ffffff; // White text for navigation
         .content-block-body {
           flex: 1;
           overflow: hidden;
+          padding: 4px; // Reduce padding to 4px
 
           .chart-scroll-container {
             height: 100%;
@@ -413,29 +414,33 @@ $nav-text-color: #ffffff; // White text for navigation
               display: flex;
               flex-direction: column;
               align-items: center;
-              justify-content: center; // Add this line
-              margin-bottom: 16px;
-              height: calc(100% - 32px); // Subtract margin from full height
+              justify-content: center;
+              margin-bottom: 8px; // Reduce margin to 8px
+              height: calc(100% - 16px); // Adjust for new margin
 
               &:last-child {
                 margin-bottom: 0;
               }
 
               img {
-                max-width: 95%; // Increase from 100% to 95%
-                max-height: 95%; // Increase from 250px to 95%
-                width: auto; // Add this line
-                height: auto; // Add this line
+                max-width: 98%; // Increase to 98%
+                max-height: 98%; // Increase to 98%
+                width: auto;
+                height: auto;
                 object-fit: contain;
               }
 
               .chart-timestamp {
-                margin-top: 8px;
-                font-size: 12px;
+                margin-top: 4px; // Reduce to 4px
+                font-size: 10px; // Slightly reduce font size
                 color: $light-text-color;
               }
             }
           }
+        }
+
+        .content-block-title {
+          padding: 0 8px; // Reduce horizontal padding
         }
       }
 
