@@ -19,6 +19,9 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 $nav-background: #1a237e; // Dark blue for navigation
 $nav-text-color: #ffffff; // White text for navigation
 
+// Add this near the top of the file with other color variables
+$right-header-color: #162b4f; // A mix of blue and grey
+
 @use "sass:color";
 
 [data-component='ConsolePage'] {
@@ -382,21 +385,43 @@ $nav-text-color: #ffffff; // White text for navigation
 
     .content-right {
       flex: 0 0 50%;
-      max-width: 50%; // Add this line to prevent shrinking
+      max-width: 50%;
       display: flex;
       flex-direction: column;
-      gap: 4px; // Reduce this value from 12px to 4px
+      gap: 4px;
+      position: relative; // Add this to allow absolute positioning of children
 
       .content-top-row {
         display: flex;
-        gap: 4px; // Reduce this value from 12px to 4px
-        height: 300px; // You might want to adjust this value as well
+        gap: 4px;
+        height: 300px;
 
         .chart-display {
           flex: 1;
           height: 100%;
           display: flex;
           flex-direction: column;
+        }
+      }
+
+      .chart-display,
+      .google-sheets {
+        .content-block-title {
+          padding: 0 12px;
+          font-size: 14px;
+          font-weight: 500;
+          color: white;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          background-image: linear-gradient(to right, $right-header-color, color.scale($right-header-color, $lightness: 15%));
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 0;
+          line-height: 36px;
         }
       }
 
@@ -438,30 +463,32 @@ $nav-text-color: #ffffff; // White text for navigation
             }
           }
         }
-
-        .content-block-title {
-          padding: 0 12px; // Restore horizontal padding
-          font-size: 14px;
-          font-weight: 500;
-          color: white;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          background-image: linear-gradient(to right, $primary-color, color.scale($primary-color, $lightness: 15%));
-          border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          height: 36px; // Fixed height to match conversation box
-          display: flex;
-          align-items: center; // Vertically center the text
-          justify-content: space-between; // Space between title and navigation buttons
-          margin: 0;
-          line-height: 36px; // Match the height for perfect centering
-        }
       }
 
       .google-sheets {
-        flex: 1;
+        transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
+        
+        &:not(.collapsed) {
+          position: absolute;
+          top: 36px; // Height of the chart display header
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 10;
+          background-color: $content-background;
+          height: calc(100% - 36px); // Subtract the height of the chart display header
+        }
+
+        &.collapsed {
+          flex: 0 0 auto;
+          height: 36px;
+
+          .content-block-body {
+            display: none;
+          }
+        }
 
         .content-block-body {
           flex: 1;
@@ -1290,7 +1317,7 @@ $nav-text-color: #ffffff; // White text for navigation
   }
 
   .capability-card {
-    background-color: #4a90e2;
+    background-color: #1f3956;
     color: white;
     padding: 10px 15px;
     border-radius: 5px;

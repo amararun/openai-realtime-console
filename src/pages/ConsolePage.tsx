@@ -889,6 +889,10 @@ export function ConsolePage() {
   // Add this function to toggle sheet collapse
   const toggleSheetCollapse = () => {
     setIsSheetCollapsed(!isSheetCollapsed);
+    const chartDisplay = document.querySelector('.chart-display');
+    if (chartDisplay) {
+      chartDisplay.classList.toggle('sheets-expanded', !isSheetCollapsed);
+    }
   };
 
   /**
