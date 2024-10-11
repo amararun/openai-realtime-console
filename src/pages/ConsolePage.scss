@@ -413,15 +413,19 @@ $nav-text-color: #ffffff; // White text for navigation
               display: flex;
               flex-direction: column;
               align-items: center;
+              justify-content: center; // Add this line
               margin-bottom: 16px;
+              height: calc(100% - 32px); // Subtract margin from full height
 
               &:last-child {
                 margin-bottom: 0;
               }
 
               img {
-                max-width: 100%;
-                max-height: 250px; // Increase this value to make the chart larger
+                max-width: 95%; // Increase from 100% to 95%
+                max-height: 95%; // Increase from 250px to 95%
+                width: auto; // Add this line
+                height: auto; // Add this line
                 object-fit: contain;
               }
 
