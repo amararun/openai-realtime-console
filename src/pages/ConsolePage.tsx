@@ -912,7 +912,29 @@ export function ConsolePage() {
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
             <span>Realtime Analytics Assistant</span>
-            <button className="agent-button-header" onClick={openAgentModal}>AGENT</button>
+          </div>
+          <div className="header-controls">
+            <button
+              style={{
+                padding: '6px 12px',
+                backgroundColor: '#1e40af',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              }}
+              onClick={openAgentModal}
+            >
+              <Zap size={14} /> AGENT
+            </button>
           </div>
           <div className="content-controls">
             {isConnected && canPushToTalk && (

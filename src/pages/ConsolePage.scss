@@ -24,7 +24,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
 
 @use "sass:color";
 
-[data-component='ConsolePage'] {
+[data-component='ConsolePage']  {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -33,6 +33,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
   flex-direction: column;
   background-color: $background-color;
   color: $text-color;
+
 
   .header-section {
     display: flex;
@@ -61,7 +62,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    
+
     .fxis-logo {
       height: 40px; // Increased from 64px to 72px
       margin-right: 16px;
@@ -212,7 +213,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
       }
     }
 
-    button, 
+    button,
     .api-key-button,
     .connection-status,
     .Toggle {
@@ -269,7 +270,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
           letter-spacing: 0.5px;
           background-image: linear-gradient(to right, $primary-color, color.scale($primary-color, $lightness: 15%));
           border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           height: 36px; // Fixed height
           display: flex;
           align-items: center; // Vertically center the text
@@ -345,7 +346,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
             letter-spacing: 0.5px;
             background-image: linear-gradient(to right, $secondary-color, color.scale($secondary-color, $lightness: 15%));
             border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             height: 36px; // Fixed height
             display: flex;
             align-items: center; // Vertically center the text
@@ -415,7 +416,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
           letter-spacing: 0.5px;
           background-image: linear-gradient(to right, $right-header-color, color.scale($right-header-color, $lightness: 15%));
           border: none;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           height: 36px;
           display: flex;
           align-items: center;
@@ -469,7 +470,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
         transition: all 0.3s ease-in-out;
         display: flex;
         flex-direction: column;
-        
+
         &:not(.collapsed) {
           position: absolute;
           top: 36px; // Height of the chart display header
@@ -745,7 +746,8 @@ $right-header-color: #162b4f; // A mix of blue and grey
       height: 50%;
       margin-bottom: 10px;
 
-      .chart-display, .kv {
+      .chart-display,
+      .kv {
         flex: 1;
         margin-right: 10px;
 
@@ -1073,8 +1075,14 @@ $right-header-color: #162b4f; // A mix of blue and grey
 
   .conversation-item {
     .speaker-content {
+
       // Styles for Markdown content
-      h1, h2, h3, h4, h5, h6 {
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
         margin-top: 1em;
         margin-bottom: 0.5em;
       }
@@ -1083,7 +1091,8 @@ $right-header-color: #162b4f; // A mix of blue and grey
         margin-bottom: 1em;
       }
 
-      ul, ol {
+      ul,
+      ol {
         margin-bottom: 1em;
         padding-left: 2em;
       }
@@ -1092,7 +1101,8 @@ $right-header-color: #162b4f; // A mix of blue and grey
         border-collapse: collapse;
         margin-bottom: 1em;
 
-        th, td {
+        th,
+        td {
           border: 1px solid $border-color;
           padding: 0.5em;
         }
@@ -1123,29 +1133,54 @@ $right-header-color: #162b4f; // A mix of blue and grey
     width: 32px;
     height: 32px;
     border: 3px solid #1a237e; // Dark navy blue to match the background
-    border-top: 3px solid transparent; /* Make the top arc transparent */
+    border-top: 3px solid transparent;
+    /* Make the top arc transparent */
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   @keyframes waveform {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.5); }
+
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+
+    50% {
+      transform: scaleY(0.5);
+    }
   }
 
   @keyframes pulse {
-    0%, 100% { background-color: rgba(0, 0, 0, 0.1); }
-    50% { background-color: rgba(0, 0, 0, 0.2); }
+
+    0%,
+    100% {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    50% {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
   }
 
   @keyframes move-stripes {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 0; }
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: 50px 0;
+    }
   }
 
   // Add this new style for the navigation
@@ -1265,28 +1300,57 @@ $right-header-color: #162b4f; // A mix of blue and grey
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes waveform {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.5); }
+
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(0.5);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { background-color: rgba(0, 0, 0, 0.1); }
-  50% { background-color: rgba(0, 0, 0, 0.2); }
+
+  0%,
+  100% {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  50% {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 @keyframes move-stripes {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 0; }
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 50px 0;
+  }
 }
 
 @keyframes spinner-orbit {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 // Add these styles at the end of the ConsolePage.scss file
@@ -1316,7 +1380,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
     padding: 0 4px;
   }
 
-  
+
   .main-header {
     display: flex;
     justify-content: space-between;
@@ -1324,29 +1388,46 @@ $right-header-color: #162b4f; // A mix of blue and grey
     flex-wrap: nowrap;
     padding-top: 12px;
 
-    .agent-button-header {
-      margin-left: 15px;
-      padding: 5px 10px;
-      background-color: #0099ff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px; // Space between controls
 
-      &:hover {
-        background-color: #66c2ff;
-      }
     }
+  }
+
+  .agent-button-custom {
+    padding: 6px 12px;
+    background-color: #1e40af;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .agent-button-custom:hover {
+    background-color: #2563eb;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .agent-button-custom svg {
+    stroke-width: 2.5px;
   }
 
   .content-title {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    
+
     .fxis-logo {
       height: 10x;
       margin-right: 16px;
@@ -1379,39 +1460,39 @@ $right-header-color: #162b4f; // A mix of blue and grey
   display: flex;
   flex-direction: row;
   gap: 10px;
-  
+
   .content-block {
     flex: 1;
-    
+
     &.events {
       flex: 0.8; // Reduce the size of the events box
     }
-    
+
     &.agent {
       flex: 0.4; // Make the agent box smaller
       display: flex;
       flex-direction: column;
-      
+
       .agent-content {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
         .agent-button {
           background: none;
           border: none;
           cursor: pointer;
           color: #0099ff;
           transition: color 0.3s ease;
-          
+
           &:hover {
             color: #66c2ff;
           }
         }
       }
     }
-    
+
     &.visualization {
       flex: 1; // Keep the voice activity box the same size
     }
@@ -1424,17 +1505,18 @@ $right-header-color: #162b4f; // A mix of blue and grey
   max-width: none;
   display: flex;
   flex-direction: column;
-  
+
   iframe {
     flex: 1;
   }
-  
+
   .agent-modal-actions {
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    
-    .close-modal, .full-page-link {
+
+    .close-modal,
+    .full-page-link {
       padding: 5px 10px;
       background-color: #0099ff;
       color: white;
@@ -1442,7 +1524,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
       border-radius: 4px;
       cursor: pointer;
       text-decoration: none;
-      
+
       &:hover {
         background-color: #66c2ff;
       }
