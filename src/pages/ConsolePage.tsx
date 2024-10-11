@@ -880,9 +880,10 @@ export function ConsolePage() {
     { title: "Analyze Data" },
     { title: "Python Charts" },
     { title: "Yahoo Finance" },
-    { title: "Update Trackers" },
+    { title: "Trackers" },
     { title: "Slide Deck" },
-    { title: "Email Reports" },
+    { title: "Email" },
+    { title: "Research" },
   ];
 
   // Update the Google Sheets section
