@@ -54,7 +54,7 @@ $right-header-color: #162b4f; // A mix of blue and grey
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
-    padding-top: 8px; // Reduced padding
+    padding-top: 14px; // Keep this unchanged
   }
 
   .content-title {
@@ -63,12 +63,12 @@ $right-header-color: #162b4f; // A mix of blue and grey
     flex-shrink: 0;
     
     .fxis-logo {
-      height: 48px; // Reduced logo size
-      margin-right: 8px; // Reduced margin
+      height: 50px; // Increased from 64px to 72px
+      margin-right: 16px;
     }
 
     span {
-      font-size: 24px; // Reduced font size
+      font-size: 36px; // Increased from 32px to 36px
       white-space: nowrap;
       font-weight: 600;
       color: #2c3e50;
