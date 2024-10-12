@@ -667,7 +667,7 @@ export function ConsolePage() {
       {
         name: 'tool_multitask_api',
         description:
-          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also query AWS and Azure data warehouses. So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Further more, use this  the user asks for any data or information to be updated into doc, document for file in which case send the info in pipe delimited format. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also connect to AWS and Azure data warehouses to run queries and transform data So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. This tool can also pull financial data from Yahoo Finance including stock prices, market capitalization, profit and loss, income statement, balance sheet, cash flows and quarterly statement. Further more, use this if user asks for any data or information to be updated into doc, document for file in which case send the info to be added to the docs. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -878,11 +878,10 @@ export function ConsolePage() {
     { title: "Text-to-SQL" },
     { title: "AWS MySQL" },
     { title: "Python" },
-    { title: "Analysis" },
+    { title: "Statistics" },
+    { title: "Analytics" },
     { title: "Charts" },
     { title: "Automation" },
-    { title: "Deck" },
-    { title: "Email" },
     { title: "Research" }
     // { title: "Yahoo Fin." }
   ];
