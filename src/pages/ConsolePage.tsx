@@ -876,15 +876,15 @@ export function ConsolePage() {
 
   const capabilities = [
     { title: "Text-to-SQL" },
-    { title: "MySQL DWH" },
+    { title: "AWS MySQL" },
     { title: "Python" },
     { title: "Analysis" },
     { title: "Charts" },
-    { title: "Trackers" },
+    { title: "Automation" },
     { title: "Deck" },
     { title: "Email" },
-    { title: "Research" },
-    { title: "Yahoo Fin." }
+    { title: "Research" }
+    // { title: "Yahoo Fin." }
   ];
 
   // Update the Google Sheets section
@@ -913,7 +913,7 @@ export function ConsolePage() {
         <div className="main-header">
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-            <span>Realtime Analytics Assistant</span>
+            <span>RTAS: Realtime Analytics Agent System</span>
           </div>
           <div className="header-controls">
             <button
