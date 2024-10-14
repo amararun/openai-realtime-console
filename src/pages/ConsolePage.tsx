@@ -680,7 +680,7 @@ export function ConsolePage() {
         },
       },
       async ({ question }: { [key: string]: any }) => {
-        const url = "https://flowise.tigzig.com/api/v1/prediction/36ed6454-2b9d-4ed1-91aa-72d15caa8ee5";
+        const url = "https://flowise.tigzig.com/api/v1/prediction/a5cde057-9994-4383-8c3b-32ac46d9bacf";
 
         const options = {
           method: 'POST',
