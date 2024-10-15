@@ -721,7 +721,7 @@ export function ConsolePage() {
                   imageUrl = imageArtifact.data;
                 } else if (imageArtifact.data.startsWith('FILE-STORAGE::')) {
                   const fileName = imageArtifact.data.replace('FILE-STORAGE::', '');
-                  imageUrl = `https://flowise.tigzig.com/api/v1/get-upload-file?chatflowId=36ed6454-2b9d-4ed1-91aa-72d15caa8ee5&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
+                  imageUrl = `https://flowise.tigzig.com/api/v1/get-upload-file?chatflowId=a5cde057-9994-4383-8c3b-32ac46d9bacf&chatId=${jsonResponse.chatId}&fileName=${fileName}`;
                 } else {
                   imageUrl = `data:image/${imageArtifact.type};base64,${imageArtifact.data}`;
                 }
