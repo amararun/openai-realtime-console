@@ -84,7 +84,10 @@ import React from 'react';
 export function ConsolePage() {
   const [isAgentModalOpen, setIsAgentModalOpen] = useState(false);
   const openAgentModal = () => {
-    setIsAgentModalOpen(true);
+    window.open('https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf', '_blank');
+  };
+  const openAgentModal2 = () => {
+    window.open('https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7', '_blank');
   };
   /**
    * Ask user for API Key
@@ -1080,7 +1083,7 @@ export function ConsolePage() {
             <div className="content-block agent">
               <div className="content-block-title">AGENT</div>
               <div className="agent-content">
-                <button className="agent-button" onClick={openAgentModal}>
+                <button className="agent-button" onClick={openAgentModal2}>
                   <Zap size={24} />
                 </button>
               </div>
@@ -1293,7 +1296,7 @@ export function ConsolePage() {
         <div className="modal-overlay" onClick={() => setIsAgentModalOpen(false)}>
           <div className="modal-content agent-modal" onClick={(e) => e.stopPropagation()}>
             <iframe
-              src="https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf"
+              src="https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7"
               width="100%"
               height="100%"
               frameBorder="0"
@@ -1301,15 +1304,14 @@ export function ConsolePage() {
             ></iframe>
             <div className="agent-modal-actions">
               <button className="close-modal" onClick={() => setIsAgentModalOpen(false)}>Close</button>
-              <a
-                href="https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => window.open('https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7', '_blank')}
                 className="full-page-link"
               >
                 Full Page
-              </a>
+              </button>
             </div>
+
           </div>
         </div>
       )}
