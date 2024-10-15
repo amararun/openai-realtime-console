@@ -670,7 +670,7 @@ export function ConsolePage() {
       {
         name: 'tool_multitask_api',
         description:
-          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also connect to AWS and Azure data warehouses to run queries and transform data So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. Further more, use this if user asks for any data or information to be updated into doc, document for file in which case send the info to be added to the docs. This tool can also do web scraping, so if user shares a URL and asks for it to be scraped then use this tool. The tool can also do google custom web search if a user requests for a web search or wherever a web search is required. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
+          'This tool sends the user input to an API endpoint that performs multiple tasks: updating a tracker, generating and email report and deck formats. Based on user request this tool can also connect to AWS and Azure data warehouses to run queries and transform data So if user refers to database or AWS then use that. This tool can also generate a chart or do  statistical analysis. Further more, use this if user asks for any data or information to be updated into doc, document for file in which case send the info to be added to the docs. This tool can also do web scraping, so if user shares a URL and asks for it to be scraped then use this tool. The tool can also do google custom web search if a user requests for a web search or wherever a web search is required. Use this tool also to pull equity and stock market data from Yahoo Finance including stock prices and company financials. The tool API can return a .txt file, a normal response, or a chart (GIF/PNG).',
         parameters: {
           type: 'object',
           properties: {
@@ -885,7 +885,8 @@ export function ConsolePage() {
     { title: "Analytics" },
     { title: "Charts" },
     { title: "Automation" },
-    { title: "Web Scraping" }
+    { title: "Web Scraping" },
+    { title: "Equities" }
     // { title: "Yahoo Fin." }
   ];
 
@@ -926,7 +927,7 @@ export function ConsolePage() {
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer',
-                fontSize: '18px',
+                fontSize: '16px',
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
@@ -937,7 +938,7 @@ export function ConsolePage() {
               }}
               onClick={openAgentModal}
             >
-              <Zap size={14} /> AGENT
+              <Zap size={24} /> TASK AGENT
             </button>
           </div>
           <div className="content-controls">
@@ -1081,12 +1082,34 @@ export function ConsolePage() {
               </div>
             </div>
             <div className="content-block agent">
-              <div className="content-block-title">AGENT</div>
-              <div className="agent-content">
-                <button className="agent-button" onClick={openAgentModal2}>
-                  <Zap size={24} />
-                </button>
-              </div>
+              <button
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  padding: '10px 10Px',
+                  backgroundColor: '#1e40af',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                }}
+                onClick={openAgentModal2}
+              >
+                <Zap size={24} />
+                <div style={{ textAlign: 'center', lineHeight: '1.2' }}>
+                  YAHOO<br />FINANCE<br />AGENT
+                </div>
+              </button>
             </div>
             <div className="content-block visualization">
               <div className="content-block-title">VOICE ACTIVITY</div>
