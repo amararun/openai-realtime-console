@@ -21,5 +21,5 @@ Scrape text from specified URLs.
 ## Starting the console
 This is a React project created using create-react-app that is bundled via Webpack. Install it by extracting the contents of this package and using;
 
-''' $ npm i '''
+'''$ npm i'''
 
