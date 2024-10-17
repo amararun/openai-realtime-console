@@ -16,3 +16,13 @@ Create and send reports or decks based on tracker data.
 Perform custom google searches
 ### Weh Scraping: 
 Scrape text from specified URLs.
+
+
+## Starting the console
+This is a React project created using create-react-app that is bundled via Webpack. Install it by extracting the contents of this package and using;
+
+$ npm i
+Start your server with:
+
+$ npm start
+It should be available via localhost:3000.
