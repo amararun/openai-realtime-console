@@ -1,0 +1,8 @@
+{
+  "name": "YFIN_BS",
+  "description": "use this tool when balance sheet data is requested. needs yahoo finance symbol. Share the full balance sheet data with all line items and for all the years received from the tool. Data to be shared in a nice table format.",
+  "color": "linear-gradient(rgb(55,224,34), rgb(86,222,114))",
+  "iconSrc": "",
+  "schema": "[{\"id\":0,\"property\":\"symbol\",\"description\":\"yahoo finance symbol\",\"type\":\"string\",\"required\":false}]",
+  "func": "/*\n* You can use any libraries imported in Flowise\n* You can use properties specified in Output Schema as variables. Ex: Property = userid, Variable = $userid\n* You can get default flow config: $flow.sessionId, $flow.chatId, $flow.chatflowId, $flow.input\n* You can get custom variables: $vars.<variable-name>\n* Must return a string value at the end of function\n*/\n\nconst fetch = require('node-fetch');\nconst url = 'https://yfin.onrender.com/get-balance-sheet/?tickers='+ $symbol;\n// const url = 'https://api.tigzig.com/get-market-data/?symbols='+ $symbol;\n\n\nconst options = {\n    method: 'GET',\n    headers: {\n        'Content-Type': 'application/json'\n    }\n};\ntry {\n    const response = await fetch(url, options);\n    const text = await response.text();\n    return text;\n} catch (error) {\n    console.error(error);\n    return '';\n}"
+}

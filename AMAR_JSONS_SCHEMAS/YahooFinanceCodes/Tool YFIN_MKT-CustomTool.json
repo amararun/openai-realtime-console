@@ -1,0 +1,8 @@
+{
+  "name": "YFIN_MKT",
+  "description": "use this tool in case of question on market capitalization. needs yahoo finance symbol. ",
+  "color": "linear-gradient(rgb(66,38,154), rgb(205,5,207))",
+  "iconSrc": "",
+  "schema": "[{\"id\":0,\"property\":\"symbol\",\"description\":\"yahoo finance symbol\",\"type\":\"string\",\"required\":false}]",
+  "func": "/*\n* You can use any libraries imported in Flowise\n* You can use properties specified in Output Schema as variables. Ex: Property = userid, Variable = $userid\n* You can get default flow config: $flow.sessionId, $flow.chatId, $flow.chatflowId, $flow.input\n* You can get custom variables: $vars.<variable-name>\n* Must return a string value at the end of function\n*/\n\nconst fetch = require('node-fetch');\nconst url = 'https://yfin.onrender.com/get-market-data/?symbols='+ $symbol;\n// const url = 'https://api.tigzig.com/get-market-data/?symbols='+ $symbol;\n\n\nconst options = {\n    method: 'GET',\n    headers: {\n        'Content-Type': 'application/json'\n    }\n};\ntry {\n    const response = await fetch(url, options);\n    const text = await response.text();\n    return text;\n} catch (error) {\n    console.error(error);\n    return '';\n}"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "T_URL_SCRAPER",
+  "description": "This tool takes a URL and then scrapes and shares text in markdown format",
+  "color": "linear-gradient(rgb(110,32,233), rgb(26,209,213))",
+  "iconSrc": "",
+  "schema": "[{\"id\":0,\"property\":\"url_to_be_scraped\",\"description\":\"this is the url to be scraped\",\"type\":\"string\",\"required\":false}]",
+  "func": "const fetch = require('node-fetch');\n\ntry {\n    // Extract the URL to be scraped from the input\n    const url_to_be_scraped = $url_to_be_scraped;\n\n    // Construct the URL to send in the request\n    const url = `https://r.jina.ai/${url_to_be_scraped}`;\n\n    // Set up the fetch options\n    const options = {\n        method: 'GET',\n        headers: {\n            'Content-Type': 'application/json'\n        }\n    };\n\n    // Make the GET request\n    const response = await fetch(url, options);\n    const text = await response.text();\n    return text;\n} catch (error) {\n    console.error(error);\n    return '';\n}\n"
+}

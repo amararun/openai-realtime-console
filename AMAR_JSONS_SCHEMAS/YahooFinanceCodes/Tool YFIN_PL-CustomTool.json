@@ -1,0 +1,8 @@
+{
+  "name": "YFIN_PL",
+  "description": "use this tool to get the annual income statement. data to be shared with user with all line items and in nice table format. yahoo finance symbol required.",
+  "color": "linear-gradient(rgb(196,224,146), rgb(17,147,217))",
+  "iconSrc": "",
+  "schema": "[{\"id\":1,\"property\":\"symbol\",\"description\":\"yahoo finance symbol\",\"type\":\"string\",\"required\":true}]",
+  "func": "/*\n* You can use any libraries imported in Flowise\n* You can use properties specified in Output Schema as variables. Ex: Property = userid, Variable = $userid\n* You can get default flow config: $flow.sessionId, $flow.chatId, $flow.chatflowId, $flow.input\n* You can get custom variables: $vars.<variable-name>\n* Must return a string value at the end of function\n*/\n\nconst fetch = require('node-fetch');\nconst url = 'https://yfin.onrender.com/get-income-statement/?tickers='+ $symbol;\n\n\nconst options = {\n    method: 'GET',\n    headers: {\n        'Content-Type': 'application/json'\n    }\n};\ntry {\n    const response = await fetch(url, options);\n    const text = await response.text();\n    return text;\n} catch (error) {\n    console.error(error);\n    return '';\n}"
+}

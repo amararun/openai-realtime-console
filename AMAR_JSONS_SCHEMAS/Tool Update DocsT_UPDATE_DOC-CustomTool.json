@@ -1,0 +1,8 @@
+{
+  "name": "T_UPDATE_DOC",
+  "description": "This tool handles submission of a single pipe-delimited data block, representing multiple rows and columns as a cohesive string for easy handling and transmission. The tool follows these steps:\n\nSends the data via a POST request to a specified URL.",
+  "color": "linear-gradient(rgb(254,179,80), rgb(63,84,147))",
+  "iconSrc": "",
+  "schema": "[{\"id\":0,\"property\":\"data\",\"description\":\"single pipe-delimited data block, representing multiple rows and columns as a cohesive string for easy handling and transmission.\",\"type\":\"string\",\"required\":true}]",
+  "func": "const fetch = require('node-fetch');\n\ntry {\n    // Extract the variable from the LLM output\n    const data = $data || '';  // The data is a long string, pipe-delimited rows and columns\n\n    // Create the data object\n    const requestData = {\n        data: data  // Include the pipe-delimited data\n    };\n\n    // Set up the URL and options for the fetch call\n    const url = 'https://hook.us1.make.com/tteu9366w8j76cg987b9nzbcqbkl4nuw';\n    const options = {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json'\n        },\n        body: JSON.stringify(requestData)\n    };\n\n    const response = await fetch(url, options);\n    const text = await response.text();\n    return text;\n} catch (error) {\n    console.error('Error:', error);\n    return '';\n}"
+}
