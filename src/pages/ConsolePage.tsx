@@ -916,7 +916,7 @@ export function ConsolePage() {
         <div className="main-header">
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-            <span>REX: Realtime Analytics Agent System</span>
+            <span>REX: Realtime AI Analytics Agent System</span>
           </div>
           <div className="header-controls">
             <button
