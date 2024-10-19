@@ -18,16 +18,29 @@ Perform custom google searches
 Scrape text from specified URLs.
 
 
-## Starting the console
+## Starting the project.
 This is a React project created using create-react-app that is bundled via Webpack. Install it by extracting the contents of this package and using;
 
+Clone the repository
+```shell
+git clone https://github.com/amararun/openai-realtime-console
+```
+
+Install dependencies        
 ```shell
 $ npm i
 ```
-
-Start your server with:
-
+Start the  server with:
 ```shell
 $ npm start
 ```
 
+
+## Resources
+1. Five-part detailed hands-on implementation guide to build AI Analytics Voice Based Assistant 
+Table of Contents and Resources: https://link.tigzig.com/NMMWmZ
+Full Implementation Guide YouTube playlist: https://link.tigzig.com/FT4pgD
+
+2. Text-to-SQL guide: https://link.tigzig.com/8s9ffG
+
+3. Frontend: Typescript. Uses the OpenAI quick start repo:  https://link.tigzig.com/tvbNGe
