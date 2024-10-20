@@ -810,7 +810,7 @@ export function ConsolePage() {
   }, [sessionId]); // Add sessionId to the dependency array
 
   useEffect(() => {
-    changeTurnEndType('server_vad');
+    changeTurnEndType('none');
   }, []);
 
   // Add this useEffect for cleanup
@@ -916,7 +916,7 @@ export function ConsolePage() {
         <div className="main-header">
           <div className="content-title">
             <img src={`${process.env.PUBLIC_URL}/FXISLOGO.png`} alt="FXIS Logo" className="fxis-logo" />
-            <span>REX: Realtime AI Analytics Agent System</span>
+            <span>REX-1: Realtime AI Analytics Agent System</span>
           </div>
           <div className="header-controls">
             <button
@@ -959,7 +959,7 @@ export function ConsolePage() {
               )}
             </div>
             <Toggle
-              defaultValue={true}
+              defaultValue={false}
               labels={['MANUAL', 'RT']}
               values={['none', 'server_vad']}
               onChange={(_, value) => changeTurnEndType(value)}
