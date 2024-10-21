@@ -44,3 +44,6 @@ Full Implementation Guide YouTube playlist: https://link.tigzig.com/FT4pgD
 2. Text-to-SQL guide: https://link.tigzig.com/8s9ffG
 
 3. Frontend: Typescript. Uses the OpenAI quick start repo:  https://link.tigzig.com/tvbNGe
+
+## Statcounter Website Traffic Code Snippet
+Statcounter tracking ID in index.html for basic web analytics of visitors. You might want to remove that post cloning.
