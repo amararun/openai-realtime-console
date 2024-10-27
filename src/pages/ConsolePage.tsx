@@ -87,7 +87,7 @@ export function ConsolePage() {
     window.open('https://flowise.tigzig.com/chatbot/a5cde057-9994-4383-8c3b-32ac46d9bacf', '_blank');
   };
   const openAgentModal2 = () => {
-    window.open('https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7', '_blank');
+    window.open('https://flowise.tigzig.com/chatbot/c79f754a-cd47-4b6a-bac6-fb7a8abd3b4d', '_blank');
   };
   /**
    * Ask user for API Key
@@ -938,7 +938,7 @@ export function ConsolePage() {
               }}
               onClick={openAgentModal}
             >
-              <Zap size={24} /> TASK AGENT
+              <Zap size={24} /> ANALYZER AGENT
             </button>
           </div>
           <div className="content-controls">
@@ -1319,7 +1319,7 @@ export function ConsolePage() {
         <div className="modal-overlay" onClick={() => setIsAgentModalOpen(false)}>
           <div className="modal-content agent-modal" onClick={(e) => e.stopPropagation()}>
             <iframe
-              src="https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7"
+              src="https://flowise.tigzig.com/chatbot/c79f754a-cd47-4b6a-bac6-fb7a8abd3b4d"
               width="100%"
               height="100%"
               frameBorder="0"
@@ -1328,7 +1328,7 @@ export function ConsolePage() {
             <div className="agent-modal-actions">
               <button className="close-modal" onClick={() => setIsAgentModalOpen(false)}>Close</button>
               <button
-                onClick={() => window.open('https://flowise.tigzig.com/chatbot/7d53ee13-1bd3-4c1a-8d3f-b3a6f117fcd7', '_blank')}
+                onClick={() => window.open('https://flowise.tigzig.com/chatbot/c79f754a-cd47-4b6a-bac6-fb7a8abd3b4d', '_blank')}
                 className="full-page-link"
               >
                 Full Page
